@@ -6,7 +6,7 @@ import { Field, ID, InputType, ObjectType } from "type-graphql";
 @Entity()
 export class Category {
   @Field((type) => ID)
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn("uuid")
   id: number;
 
   @Field()
