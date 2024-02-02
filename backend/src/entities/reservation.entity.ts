@@ -1,6 +1,15 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  JoinTable,
+} from "typeorm";
 import { Field, ObjectType } from "type-graphql";
 import User from "./user.entity";
+import Material from "./material.entity";
 
 enum StatutReservation {
   AWAITING = "en_attente",
@@ -20,6 +29,10 @@ export default class Reservation {
   @Field()
   @ManyToOne(() => User, (user) => user.id)
   user: User;
+
+  @JoinTable()
+  @ManyToMany(() => User, (m) => m.id)
+  material: Material;
 
   @Field()
   @Column()

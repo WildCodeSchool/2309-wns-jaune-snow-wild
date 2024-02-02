@@ -7,6 +7,8 @@ import {
 } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
 import { Length } from "class-validator";
+import { Category } from "./category.entity";
+import Reservation from "./reservation.entity";
 
 @ObjectType()
 @Entity()
@@ -39,14 +41,14 @@ export default class Material {
   @Column()
   disponibility: boolean;
 
-  //     @Field(() => Category)
-  //     @ManyToOne(() => Category, (c) => c.material, {
-  //     cascade: true,
-  //      })
-  //     category: Category;
+  @Field(() => Category)
+  @ManyToOne(() => Category, (c) => c.material, {
+    cascade: true,
+  })
+  category: Category;
 
-  //     @Field()
-  //     @ManyToMany(() => Reservation, (r) => r.material, {
-  //     cascade: true,
-  //   })
+  @ManyToMany(() => Reservation, (r) => r.material, {
+    cascade: true,
+  })
+  reservation: Reservation[];
 }
