@@ -7,6 +7,15 @@ services:
     #   - 4000
     volumes:
       - ./backend/src:/app/src
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "curl -f http://backend:4000/graphql?query=%7B__typename%7D -H 'Apollo-Require-Preflight: true' || exit 1",
+        ]
+      interval: 10s
+      timeout: 30s
+      retries: 5
     environment:
       - WDS_SOCKET_HOST=127.0.0.1
       - CHOKIDAR_USEPOLLING=true
@@ -27,17 +36,17 @@ services:
     # env_file:
     #   - ./.env
   db:
-    image: postgres
+    image: postgres:15
     restart: always
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -d snowwild -U postgres"]
       interval: 5s
-      timeout: 5s
-      retries: 10
+      timeout: 40s
+      retries: 15
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: db
+      POSTGRES_DB: snowwild
     ports:
       - 5432:5432
     volumes:
