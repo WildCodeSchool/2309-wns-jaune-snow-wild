@@ -7,7 +7,7 @@ import { Field, ID, InputType, ObjectType } from "type-graphql";
 export class Category {
   @Field((type) => ID)
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Field()
   @Column()
