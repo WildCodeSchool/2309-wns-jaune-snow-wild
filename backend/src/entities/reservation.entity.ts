@@ -3,11 +3,11 @@ import { Field, ObjectType } from "type-graphql";
 import User from "./user.entity";
 
 enum StatutReservation {
-    AWAITING = 'en_attente',
-    CONFIRMATION = 'confirmée',
-    PAID = 'payée',
-    CANCEL = 'annulée',
-    FINISHED = 'terminée'
+  AWAITING = "en_attente",
+  CONFIRMATION = "confirmée",
+  PAID = "payée",
+  CANCEL = "annulée",
+  FINISHED = "terminée",
 }
 
 @ObjectType()
@@ -15,11 +15,11 @@ enum StatutReservation {
 export default class Reservation {
   @Field()
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  id: number;
 
   @Field()
   @ManyToOne(() => User, (user) => user.id)
-    user: User
+  user: User;
 
   @Field()
   @Column()
@@ -34,6 +34,10 @@ export default class Reservation {
   final_price: number;
 
   @Field()
-  @Column({ type: 'enum', enum: StatutReservation, default: StatutReservation.AWAITING })
+  @Column({
+    type: "enum",
+    enum: StatutReservation,
+    default: StatutReservation.AWAITING,
+  })
   status: StatutReservation;
 }
