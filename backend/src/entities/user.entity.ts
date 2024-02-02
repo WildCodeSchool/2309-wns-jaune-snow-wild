@@ -1,18 +1,18 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { Field, ObjectType } from 'type-graphql';
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Field, ObjectType } from "type-graphql";
 
 // on définit les 2 rôles
 enum UserRole {
-    ADMIN = "admin",
-    USER = "user",
-  }
+  ADMIN = "admin",
+  USER = "user",
+}
 
 @ObjectType()
 @Entity()
 export default class User {
   @Field()
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  id: number;
 
   @Field()
   @Column()
@@ -42,4 +42,3 @@ export default class User {
   })
   role: UserRole;
 }
-

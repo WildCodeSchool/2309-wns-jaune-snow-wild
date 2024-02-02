@@ -1,13 +1,22 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+  JoinTable,
+} from "typeorm";
 import { Field, ObjectType } from "type-graphql";
 import User from "./user.entity";
+import Material from "./material.entity";
 
 enum StatutReservation {
-    AWAITING = 'en_attente',
-    CONFIRMATION = 'confirmée',
-    PAID = 'payée',
-    CANCEL = 'annulée',
-    FINISHED = 'terminée'
+  AWAITING = "en_attente",
+  CONFIRMATION = "confirmée",
+  PAID = "payée",
+  CANCEL = "annulée",
+  FINISHED = "terminée",
 }
 
 @ObjectType()
@@ -15,11 +24,15 @@ enum StatutReservation {
 export default class Reservation {
   @Field()
   @PrimaryGeneratedColumn("uuid")
-  id: string;
+  id: number;
 
   @Field()
   @ManyToOne(() => User, (user) => user.id)
-    user: User
+  user: User;
+
+  @JoinTable()
+  @ManyToMany(() => User, (m) => m.id)
+  material: Material;
 
   @Field()
   @Column()
@@ -34,6 +47,10 @@ export default class Reservation {
   final_price: number;
 
   @Field()
-  @Column({ type: 'enum', enum: StatutReservation, default: StatutReservation.AWAITING })
+  @Column({
+    type: "enum",
+    enum: StatutReservation,
+    default: StatutReservation.AWAITING,
+  })
   status: StatutReservation;
 }
