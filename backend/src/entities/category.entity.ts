@@ -5,10 +5,10 @@ import Material from "./material.entity";
 
 @ObjectType()
 @Entity()
-export class Category {
+export default class Category {
   @Field((type) => ID)
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Field()
   @Column()
@@ -16,7 +16,7 @@ export class Category {
 
   @Field(() => [Material])
   @OneToMany(() => Material, (m) => m.category)
-  material: Material[];
+  material?: Material[];
 }
 
 @InputType()

@@ -7,7 +7,7 @@ import {
 } from "typeorm";
 import { Field, ObjectType } from "type-graphql";
 import { Length } from "class-validator";
-import { Category } from "./category.entity";
+import Category from "./category.entity";
 import Reservation from "./reservation.entity";
 
 @ObjectType()
@@ -15,7 +15,7 @@ import Reservation from "./reservation.entity";
 export default class Material {
   @Field()
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Field()
   @Column({ length: 50 })

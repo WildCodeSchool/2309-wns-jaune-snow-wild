@@ -24,7 +24,7 @@ enum StatutReservation {
 export default class Reservation {
   @Field()
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
   @Field()
   @ManyToOne(() => User, (user) => user.id)
