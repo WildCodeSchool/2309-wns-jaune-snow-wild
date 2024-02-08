@@ -30,4 +30,12 @@ export default class CategoryService {
     await this.db.remove(category);
     return { ...category, id };
   }
+
+  async find (id: string) {
+    const category = await this.db.findOne({ where: { id }, relations: { material: true } });
+    if (!category) {
+      throw new Error("La catégorie n'existe pas!");
+    }
+    return category;
+  }
 }

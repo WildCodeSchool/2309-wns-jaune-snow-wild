@@ -1,7 +1,6 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from "typeorm";
-
 import { Field, ID, InputType, ObjectType } from "type-graphql";
-import Material from "./material.entity";
+import Material, { PartialCategoryInput } from "./material.entity";
 
 @ObjectType()
 @Entity()
@@ -18,6 +17,7 @@ export default class Category {
   @OneToMany(() => Material, (m) => m.category)
   material?: Material[];
 }
+
 
 @InputType()
 export class CreateCategoryInput {
