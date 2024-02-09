@@ -33,8 +33,9 @@ services:
       - WDS_SOCKET_HOST=127.0.0.1
       - CHOKIDAR_USEPOLLING=true
       - WATCHPACK_POLLING=true
-    # env_file:
-    #   - ./.env
+    env_file:
+     # - ./.env
+      - ./backend/.env
   db:
     image: postgres:15
     restart: always
