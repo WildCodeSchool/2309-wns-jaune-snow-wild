@@ -1,5 +1,6 @@
 import BookResolver from "./resolvers/book.resolver";
 import MaterialResolver from "./resolvers/material.resolver";
+import UserResolver from "./resolvers/user.resolver";
 import datasource from "./db";
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
@@ -19,7 +20,7 @@ const httpServer = http.createServer(app);
 
 async function main() {
   const schema = await buildSchema({
-    resolvers: [BookResolver, CategoryResolver, MaterialResolver],
+    resolvers: [BookResolver, CategoryResolver, MaterialResolver, UserResolver],
     validate: false,
   });
 
