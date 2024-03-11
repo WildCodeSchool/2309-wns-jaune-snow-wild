@@ -2,9 +2,6 @@ import User, { InputRegister } from "../entities/user.entity";
 import { Repository } from "typeorm";
 import datasource from "../db";
 
-import { validate } from "class-validator";
-
-
 export default class UserService {
   db: Repository<User>;
   constructor() {
@@ -17,7 +14,6 @@ export default class UserService {
     }
     return user;
   }
-
 
   async listUser() {
     return this.db.find();
@@ -36,7 +32,5 @@ export default class UserService {
     const user = (await this.findUser(id)) as User;
     await this.db.remove(user);
     return { ...user, id };
-
   }
-
 }

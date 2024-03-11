@@ -12,7 +12,6 @@ export interface MyContext {
     user: User | null;
   }
 
-
 @Resolver()
 export default class UserResolver {
   @Query(() => [User])
@@ -32,11 +31,13 @@ export default class UserResolver {
       const token = await new SignJWT({ email: user.email, role: user.role })
         .setProtectedHeader({ alg: "HS256", typ: "jwt" })
         .setExpirationTime("2h")
-        .sign(new TextEncoder().encode(`${process.env.SECRET_KEY}`));
-
-      let cookies = new Cookies(ctx.req, ctx.res);
-      cookies.set("token", token, { httpOnly: true });
-
+        .sign(new TextEncoder().encode(`${process.env.JWT_SECRET_KEY}`));
+      
+      if(ctx && ctx.req && ctx.res) {
+        let cookies = new Cookies(ctx.req, ctx.res);
+        cookies.set("token", token, { httpOnly: true });
+        console.log("cookies set : ===>", cookies);
+      }
       m.message = "Bienvenue!";
       m.success = true;
     } else {
@@ -62,7 +63,6 @@ export default class UserResolver {
   
   @Mutation(() => UserWithoutPassword)
   async register(@Arg("infos") infos: InputRegister) {
-    console.log(infos)
     const user = await new UserService().findUserByEmail(infos.email);
     if (user) {
       throw new Error("Cet email est déjà pris!");
@@ -70,5 +70,4 @@ export default class UserResolver {
     const newUser = await new UserService().createUser(infos);
     return newUser;
   }
-
 }
