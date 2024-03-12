@@ -8,13 +8,20 @@ import {
 import { Field, InputType, Int, ObjectType } from "type-graphql";
 import * as argon2 from "argon2";
 
-// on définit les 2 rôles
-// enum UserRole {
-//   ADMIN = "admin",
-//   USER = "user",
-// }
 
-type UserRole = "ADMIN" | "USER";
+
+import {
+  Length,
+  IsEmail,
+  Min,
+  Max,
+} from "class-validator"
+
+export enum UserRoleEnum {
+  admin = "ADMIN",
+  user = "USER",
+}
+
 
 @ObjectType()
 @Entity()
@@ -40,25 +47,30 @@ export default class User {
   lastName: string;
 
   @Field()
-  @Column()
+  @Column({ nullable: false })
+  @IsEmail()
   email: string;
 
   @Field()
-  @Column()
+  @Column({ nullable: false })
   password: string;
 
   @Field()
   @Column()
+  @Min(10)
+  @Max(10)
   phone: string; //c'est pas int mais number
 
   @Field()
   @Column({
     type: "text",
     enum: ["ADMIN", "USER"],
-    nullable: true,
-    default: "USER",
+
+    nullable: true, 
+    default: UserRoleEnum.user
   })
-  role: UserRole;
+  role: UserRoleEnum
+
 }
 
 @ObjectType()
@@ -105,7 +117,7 @@ export class UserWithoutPassword
   email: string;
 
   @Field(() => String)
-  role: UserRole;
+  role: UserRoleEnum;
 }
 
 @InputType()
