@@ -1,4 +1,10 @@
-import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { Field, InputType, Int, ObjectType } from "type-graphql";
 import * as argon2 from "argon2";
 
@@ -8,20 +14,19 @@ import * as argon2 from "argon2";
 //   USER = "user",
 // }
 
-type UserRole = "ADMIN" | "USER"
+type UserRole = "ADMIN" | "USER";
 
 @ObjectType()
 @Entity()
 export default class User {
-
   @BeforeInsert()
   @BeforeUpdate()
   protected async hashPassword() {
-    if (!this.password.startsWith("$argon2")){
+    if (!this.password.startsWith("$argon2")) {
       this.password = await argon2.hash(this.password);
     }
   }
-  
+
   @Field()
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -50,10 +55,10 @@ export default class User {
   @Column({
     type: "text",
     enum: ["ADMIN", "USER"],
-    nullable: true, 
-    default: "USER"
+    nullable: true,
+    default: "USER",
   })
-  role: UserRole
+  role: UserRole;
 }
 
 @ObjectType()
@@ -67,37 +72,34 @@ export class Message {
 
 @InputType()
 export class InputRegister extends User {
-
-  @Field()
+  @Field({ nullable: false })
   firstName: string;
 
-  @Field()
+  @Field({ nullable: false })
   lastName: string;
 
-  @Field()
+  @Field({ nullable: false })
   email: string;
 
-  @Field()
+  @Field({ nullable: false })
   password: string;
 
-  @Field()
+  @Field({ nullable: false })
   phone: string;
-
 }
 
 @InputType()
 export class InputRegisterWithoutPassword {
-  @Field()
+  @Field({ nullable: false })
   email: string;
-
 }
 
 @ObjectType()
-export class UserWithoutPassword implements Omit<User, "password" | "lastName" | "firstName" | "phone"> {
-   
+export class UserWithoutPassword
+  implements Omit<User, "password" | "lastName" | "firstName" | "phone">
+{
   @Field()
   id: string;
-
 
   @Field()
   email: string;
@@ -108,10 +110,10 @@ export class UserWithoutPassword implements Omit<User, "password" | "lastName" |
 
 @InputType()
 export class InputLogin {
-  @Field()
+  @Field({ nullable: false })
   email: string;
 
-  @Field()
+  @Field({ nullable: false })
   password: string;
 }
 
@@ -120,6 +122,6 @@ export class InputChangePassword {
   @Field()
   token: string;
 
-  @Field()
+  @Field({ nullable: false })
   password: string;
 }

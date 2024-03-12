@@ -57,66 +57,65 @@ export default class Material {
 @InputType()
 export class PartialCategoryInput {
   @Field(() => ID)
-    id: string
+  id: string;
 }
 
 @InputType()
 export class CreateMaterialInput {
-  @Field()
-    name: string
+  @Field({ nullable: false })
+  name: string;
 
   @Field({ nullable: true })
-    description: string
+  description: string;
 
-  @Field(() => Float)
-    price: number
-
-  @Field()
-    picture: string
+  @Field(() => Float, { nullable: false })
+  price: number;
 
   @Field()
-    category: PartialCategoryInput
+  picture: string;
+
+  @Field({ nullable: false })
+  category: PartialCategoryInput;
 }
 
 @InputType()
 export class UpdateMaterialInput {
-
   @Field(() => ID)
-    id: string
+  id: string;
 
   @Field({ nullable: true })
-    name: string
+  name: string;
 
   @Field({ nullable: true })
-    description: string
+  description: string;
 
   @Field(() => Float, { nullable: true })
-    price: number
+  price: number;
 
   @Field({ nullable: true })
-    picture: string
+  picture: string;
 
   @Field({ nullable: true })
-    category: PartialCategoryInput
+  category: PartialCategoryInput;
 }
 
 @ObjectType()
 export class MaterialDeleted {
   @Field(() => ID)
-    id: string
+  id: string;
 
   @Field({ nullable: true })
-    name: string
+  name: string;
 
   @Field({ nullable: true })
-    description: string
+  description: string;
 
   @Field(() => Float, { nullable: true })
-    price: number
+  price: number;
 
   @Field({ nullable: true })
-    picture: string
+  picture: string;
 
-    @Field(() => Category)
-    category: Category;
+  @Field(() => Category)
+  category: Category;
 }
