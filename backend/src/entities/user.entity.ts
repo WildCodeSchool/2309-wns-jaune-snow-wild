@@ -2,13 +2,17 @@ import { BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } fr
 import { Field, InputType, Int, ObjectType } from "type-graphql";
 import * as argon2 from "argon2";
 
-// on définit les 2 rôles
-// enum UserRole {
-//   ADMIN = "admin",
-//   USER = "user",
-// }
+import {
+  Length,
+  IsEmail,
+  Min,
+  Max,
+} from "class-validator"
 
-type UserRole = "ADMIN" | "USER"
+export enum UserRoleEnum {
+  admin = "ADMIN",
+  user = "USER",
+}
 
 @ObjectType()
 @Entity()
@@ -35,15 +39,18 @@ export default class User {
   lastName: string;
 
   @Field()
-  @Column()
+  @Column({ nullable: false })
+  @IsEmail()
   email: string;
 
   @Field()
-  @Column()
+  @Column({ nullable: false })
   password: string;
 
   @Field()
   @Column()
+  @Min(10)
+  @Max(10)
   phone: string; //c'est pas int mais number
 
   @Field()
@@ -51,9 +58,9 @@ export default class User {
     type: "text",
     enum: ["ADMIN", "USER"],
     nullable: true, 
-    default: "USER"
+    default: UserRoleEnum.user
   })
-  role: UserRole
+  role: UserRoleEnum
 }
 
 @ObjectType()
@@ -82,14 +89,12 @@ export class InputRegister extends User {
 
   @Field()
   phone: string;
-
 }
 
 @InputType()
 export class InputRegisterWithoutPassword {
   @Field()
   email: string;
-
 }
 
 @ObjectType()
@@ -103,7 +108,7 @@ export class UserWithoutPassword implements Omit<User, "password" | "lastName" |
   email: string;
 
   @Field(() => String)
-  role: UserRole;
+  role: UserRoleEnum;
 }
 
 @InputType()

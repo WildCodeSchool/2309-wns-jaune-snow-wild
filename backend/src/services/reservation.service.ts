@@ -2,13 +2,13 @@ import { Repository } from "typeorm";
 import datasource from "../db";
 import Reservation from "../entities/reservation.entity";
 
-export default class BookService {
+export default class ReservationService {
   db: Repository<Reservation>;
   constructor() {
     this.db = datasource.getRepository(Reservation);
   }
 
-  async listBooks() {
+  async listReservations() {
     return this.db.find();
   }
 
