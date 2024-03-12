@@ -18,9 +18,8 @@ export default class Category {
   material?: Material[];
 }
 
-
 @InputType()
 export class CreateCategoryInput {
-  @Field()
+  @Field({ nullable: false })
   name: string;
 }
