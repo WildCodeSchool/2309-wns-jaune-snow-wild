@@ -33,7 +33,7 @@ export default class User {
   id: string;
 
   @Field(() => [Reservation])
-  @OneToMany(() => Reservation, (reservation) => reservation.user)
+  @OneToMany(() => Reservation, (reservation) => reservation.userId)
   reservations: Reservation[];
 
   @Field()
