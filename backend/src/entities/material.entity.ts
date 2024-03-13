@@ -3,6 +3,7 @@ import {
   Entity,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Field, Float, ID, InputType, Int, ObjectType } from "type-graphql";
@@ -10,6 +11,7 @@ import { Length } from "class-validator";
 import Category from "./category.entity";
 import Reservation from "./reservation.entity";
 import CategoryResolver from "../resolvers/category.resolver";
+import { ReservationMaterial } from "./reservation_material.entity";
 
 @ObjectType()
 @Entity()
@@ -38,20 +40,15 @@ export default class Material {
   @Column()
   description: string;
 
-  @Field()
-  @Column()
-  disponibility: boolean;
+  // @Field()
+  // @Column()
+  // disponibility: boolean;
 
   @Field(() => Category)
   @ManyToOne(() => Category, (c) => c.material, {
     cascade: true,
   })
   category: Category;
-
-  @ManyToMany(() => Reservation, (r) => r.material, {
-    cascade: true,
-  })
-  reservation: Reservation[];
 }
 
 @InputType()
@@ -70,6 +67,9 @@ export class CreateMaterialInput {
 
   @Field(() => Float, { nullable: false })
   price: number;
+
+  @Field({ nullable: false })
+  quantity: number;
 
   @Field()
   picture: string;
