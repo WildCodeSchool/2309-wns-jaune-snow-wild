@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToMany,
   ManyToOne,
   OneToMany,
@@ -49,6 +50,11 @@ export default class Material {
     cascade: true,
   })
   category: Category;
+
+  @Field(() => [ReservationMaterial])
+  @JoinColumn()
+  @OneToMany(() => ReservationMaterial, (r) => r.material)
+  reservationMaterials: ReservationMaterial[];
 }
 
 @InputType()
