@@ -7,9 +7,10 @@ import {
   PrimaryGeneratedColumn,
   JoinTable,
 } from "typeorm";
-import { Field, ObjectType } from "type-graphql";
+import { Field, InputType, ObjectType } from "type-graphql";
 import User from "./user.entity";
 import Material from "./material.entity";
+import { ReservationMaterial } from "./reservation_material.entity";
 
 enum StatutReservation {
   AWAITING = "en_attente",
@@ -26,17 +27,13 @@ export default class Reservation {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Field()
-  @ManyToOne(() => User, (user) => user.id)
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.reservations)
   user: User;
-
-  @JoinTable()
-  @ManyToMany(() => User, (m) => m.id)
-  material: Material;
 
   @Field()
   @Column()
-  debut_date: Date;
+  start_date: Date;
 
   @Field()
   @Column()
@@ -55,4 +52,14 @@ export default class Reservation {
   status: StatutReservation;
 }
 
-// Hellp
+@InputType()
+export class InputReservation extends Reservation {
+  @Field({ nullable: false })
+  id: string;
+
+  @Field({ nullable: false })
+  start_date: Date;
+
+  @Field({ nullable: false })
+  end_date: Date;
+}

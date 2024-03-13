@@ -21,7 +21,13 @@ const httpServer = http.createServer(app);
 
 async function main() {
   const schema = await buildSchema({
-    resolvers: [BookResolver, CategoryResolver, MaterialResolver, UserResolver, ReservationResolver],
+    resolvers: [
+      BookResolver,
+      CategoryResolver,
+      MaterialResolver,
+      UserResolver,
+      ReservationResolver,
+    ],
     validate: false,
   });
 

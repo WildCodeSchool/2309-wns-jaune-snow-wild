@@ -3,25 +3,19 @@ import {
   BeforeUpdate,
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import { Field, InputType, Int, ObjectType } from "type-graphql";
 import * as argon2 from "argon2";
 
-
-
-import {
-  Length,
-  IsEmail,
-  Min,
-  Max,
-} from "class-validator"
+import { Length, IsEmail, Min, Max } from "class-validator";
+import Reservation from "./reservation.entity";
 
 export enum UserRoleEnum {
   admin = "ADMIN",
   user = "USER",
 }
-
 
 @ObjectType()
 @Entity()
@@ -38,6 +32,10 @@ export default class User {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
+  @Field(() => [Reservation])
+  @OneToMany(() => Reservation, (reservation) => reservation.user)
+  reservations: Reservation[];
+
   @Field()
   @Column()
   firstName: string;
@@ -47,7 +45,7 @@ export default class User {
   lastName: string;
 
   @Field()
-  @Column({ nullable: false })
+  @Column({ nullable: false, unique: true })
   @IsEmail()
   email: string;
 
@@ -66,11 +64,10 @@ export default class User {
     type: "text",
     enum: ["ADMIN", "USER"],
 
-    nullable: true, 
-    default: UserRoleEnum.user
+    nullable: true,
+    default: UserRoleEnum.user,
   })
-  role: UserRoleEnum
-
+  role: UserRoleEnum;
 }
 
 @ObjectType()
@@ -108,7 +105,11 @@ export class InputRegisterWithoutPassword {
 
 @ObjectType()
 export class UserWithoutPassword
-  implements Omit<User, "password" | "lastName" | "firstName" | "phone">
+  implements
+    Omit<
+      User,
+      "password" | "lastName" | "firstName" | "phone" | "reservations"
+    >
 {
   @Field()
   id: string;
