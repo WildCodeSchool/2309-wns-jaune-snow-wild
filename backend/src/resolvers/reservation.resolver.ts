@@ -38,9 +38,7 @@ export default class ReservationResolver {
 
     const reservationMaterials = await Promise.all(materialsPromises);
 
-    newReservation.reservationMaterials =
-      reservationMaterials as ReservationMaterial[];
-
+    newReservation.reservationMaterials = reservationMaterials;
     return newReservation;
   }
 }

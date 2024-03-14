@@ -17,10 +17,14 @@ export default class ReservationMaterialService {
   }
 
   async findReservationMaterial(id: string) {
-    return this.db.findOne({
+    const reservationMaterial = await this.db.findOne({
       where: { id },
       relations: { material: true, reservation: true },
     });
+    if (!reservationMaterial) {
+      throw new Error("Le reservation material n'existe pas");
+    }
+    return reservationMaterial;
   }
   async createResMat(data: {
     reservation: Reservation;
@@ -33,6 +37,6 @@ export default class ReservationMaterialService {
 
     const reservationmaterial = await this.db.save(newReservationMaterial);
 
-    return this.findReservationMaterial(reservationmaterial.id);
+    return await this.findReservationMaterial(reservationmaterial.id);
   }
 }
