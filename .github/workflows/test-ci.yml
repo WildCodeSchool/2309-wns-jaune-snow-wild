@@ -1,4 +1,4 @@
-name: test-docker
+name: test-ci
 
 on: 
   pull_request:
@@ -33,7 +33,7 @@ jobs:
               uses: actions/checkout@v2
             - name: Goto back and run tests
               run: cd backend && npm i && npm run testCI
-
+  
     docker:
         needs: test-back
         runs-on: ubuntu-latest
