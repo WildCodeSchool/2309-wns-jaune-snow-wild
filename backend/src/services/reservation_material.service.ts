@@ -4,6 +4,7 @@ import {
 } from "./../entities/reservation_material.entity";
 import { Repository } from "typeorm";
 import datasource from "../db";
+import Reservation from "../entities/reservation.entity";
 
 export default class ReservationMaterialService {
   db: Repository<ReservationMaterial>;
@@ -15,10 +16,23 @@ export default class ReservationMaterialService {
     return this.db.find();
   }
 
-  async createResMat(data: CreateReservationMaterialInput) {
-    console.log("DATA: ===>", data);
-    const newReservationMaterial = this.db.create(data);
+  async findReservationMaterial(id: string) {
+    return this.db.findOne({
+      where: { id },
+      relations: { material: true, reservation: true },
+    });
+  }
+  async createResMat(data: {
+    reservation: Reservation;
+    quantity: number;
+    material: {
+      id: string;
+    };
+  }) {
+    const newReservationMaterial = this.db.create({ ...data });
 
-    return await this.db.save(newReservationMaterial);
+    const reservationmaterial = await this.db.save(newReservationMaterial);
+
+    return this.findReservationMaterial(reservationmaterial.id);
   }
 }

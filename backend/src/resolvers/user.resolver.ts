@@ -1,16 +1,22 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import UserService from "../services/user.service";
-import User, { InputLogin, InputRegister, Message, UserWithoutPassword, InputRegisterWithoutPassword } from "../entities/user.entity";
+import User, {
+  InputLogin,
+  InputRegister,
+  Message,
+  UserWithoutPassword,
+  InputRegisterWithoutPassword,
+} from "../entities/user.entity";
 import * as argon2 from "argon2";
 import { SignJWT } from "jose";
 import express from "express";
 import Cookies from "cookies";
 
 export interface MyContext {
-    req: express.Request;
-    res: express.Response;
-    user: User | null;
-  }
+  req: express.Request;
+  res: express.Response;
+  user: User | null;
+}
 
 @Resolver()
 export default class UserResolver {
@@ -32,11 +38,10 @@ export default class UserResolver {
         .setProtectedHeader({ alg: "HS256", typ: "jwt" })
         .setExpirationTime("2h")
         .sign(new TextEncoder().encode(`${process.env.JWT_SECRET_KEY}`));
-      
-      if(ctx && ctx.req && ctx.res) {
+
+      if (ctx && ctx.req && ctx.res) {
         let cookies = new Cookies(ctx.req, ctx.res);
         cookies.set("token", token, { httpOnly: true });
-        console.log("cookies set : ===>", cookies);
       }
       m.message = "Bienvenue!";
       m.success = true;
@@ -60,7 +65,6 @@ export default class UserResolver {
     return m;
   }
 
-  
   @Mutation(() => UserWithoutPassword)
   async register(@Arg("infos") infos: InputRegister) {
     const user = await new UserService().findUserByEmail(infos.email);

@@ -35,12 +35,12 @@ export class ReservationMaterial extends BaseEntity {
 
 @InputType()
 export class CreateReservationMaterialInput {
-  @Field(() => ID)
+  @Field()
   reservationId: string; // Identifiant de la réservation
 
-  @Field(() => ID)
+  @Field()
   materialId: string; // Identifiant du matériau
 
   @Field()
-  quantity: number; // Quantité de matériel réservée
+  quantity: number; // Quantité de matériel réservé
 }
