@@ -33,7 +33,6 @@ jobs:
 
     docker:
         needs: test-back
-        if: github.ref == 'refs/heads/main'
         runs-on: ubuntu-latest
         steps:
           - name: Set up QEMU
