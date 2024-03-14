@@ -9,5 +9,5 @@ jobs:
             - name: 👀 Check out code
               uses: actions/checkout@v2
             - name: Goto back and run tests
-              run: cd backend && npm i && npm test
-              
+              run: cd backend && npm i && npm testCI
+
