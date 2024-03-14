@@ -16,7 +16,8 @@ export default class ReservationService {
   }
 
   async createReservation(data: CreateReservationInput) {
-    const total_price_by_row = data.materials.map((material) => {
+    const { materials, ...otherData } = data;
+    const total_price_by_row = materials.map((material) => {
       return material.unit_price * material.quantity;
     });
 
@@ -26,7 +27,7 @@ export default class ReservationService {
 
     const final_price = total_price_by_row.reduce(sum);
     const dataIntermediaire = {
-      ...data,
+      ...otherData,
       final_price,
       statut: StatutReservation.AWAITING,
     };
@@ -34,7 +35,6 @@ export default class ReservationService {
 
     const creatResa = await this.db.save(newReservation);
 
-    console.log(creatResa);
     return creatResa;
   }
 }

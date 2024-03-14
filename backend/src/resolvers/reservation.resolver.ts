@@ -5,6 +5,7 @@ import Reservation, {
 } from "../entities/reservation.entity";
 import ReservationMaterialService from "../services/reservation_material.service";
 import { resolveReadonlyArrayThunk } from "graphql";
+import { ReservationMaterial } from "../entities/reservation_material.entity";
 
 @Resolver()
 export default class ReservationResolver {
@@ -26,25 +27,19 @@ export default class ReservationResolver {
     const newReservation = await new ReservationService().createReservation(
       data
     );
-    console.log(newReservation);
-    const reservationMaterial = data.materials.map(async (material) => {
+    const materialsPromises = data.materials.map((material) => {
       const dataToResMat = {
-        reservationId: newReservation.id,
+        reservation: newReservation, //  {id: ...}
         quantity: material.quantity,
-        materialId: material.materialId,
+        material: { id: material.materialId },
       };
-
-      const res = await new ReservationMaterialService().createResMat(
-        dataToResMat
-      );
-      console.log("RES: ", res);
-      console.log("DATA2RES: ", dataToResMat);
-      if (!res) {
-        throw new Error("La ReservationMateriel n'a pas pu etre faite");
-      }
+      return new ReservationMaterialService().createResMat(dataToResMat);
     });
-    await Promise.all(reservationMaterial);
-    console.log(reservationMaterial);
+
+    const reservationMaterials = await Promise.all(materialsPromises);
+
+    newReservation.reservationMaterials =
+      reservationMaterials as ReservationMaterial[];
 
     return newReservation;
   }

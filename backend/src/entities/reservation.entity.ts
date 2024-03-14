@@ -31,7 +31,7 @@ export default class Reservation {
   id: string;
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, (user) => user.reservations)
   userId: string;
 
   @Field()
@@ -56,7 +56,7 @@ export default class Reservation {
 
   @Field(() => [ReservationMaterial])
   @JoinColumn()
-  @OneToMany(() => ReservationMaterial, (r) => r.material)
+  @OneToMany(() => ReservationMaterial, (r) => r.id)
   reservationMaterials: ReservationMaterial[];
 }
 
