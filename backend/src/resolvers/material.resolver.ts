@@ -8,7 +8,6 @@ export default class MaterialResolver{
     @Query(() => [Material])
     async listMaterials () {
         const materials = await new MaterialService().listMaterials();
-        console.log('MATERIALS', materials);
         return materials;
   }
 
