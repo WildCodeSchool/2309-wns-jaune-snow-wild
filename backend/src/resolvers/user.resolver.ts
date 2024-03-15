@@ -11,13 +11,7 @@ import * as argon2 from "argon2";
 import { SignJWT } from "jose";
 import express from "express";
 import Cookies from "cookies";
-
-export interface MyContext {
-  req: express.Request;
-  res: express.Response;
-  user: User | null;
-}
-
+import { MyContext } from "..";
 @Resolver()
 export default class UserResolver {
   @Query(() => [User])
@@ -27,6 +21,7 @@ export default class UserResolver {
 
   @Query(() => Message)
   async login(@Arg("infos") infos: InputLogin, @Ctx() ctx: MyContext) {
+    console.log("ctx res-------->", ctx.req );
     const user = await new UserService().findUserByEmail(infos.email);
     if (!user) {
       throw new Error("Vérifiez vos informations");
@@ -38,11 +33,12 @@ export default class UserResolver {
         .setProtectedHeader({ alg: "HS256", typ: "jwt" })
         .setExpirationTime("2h")
         .sign(new TextEncoder().encode(`${process.env.JWT_SECRET_KEY}`));
-
+      console.log('token: ', token)
       if (ctx && ctx.req && ctx.res) {
         let cookies = new Cookies(ctx.req, ctx.res);
         cookies.set("token", token, { httpOnly: true });
       }
+
       m.message = "Bienvenue!";
       m.success = true;
     } else {

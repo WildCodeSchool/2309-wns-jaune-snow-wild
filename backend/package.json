@@ -5,7 +5,9 @@
   "scripts": {
     "start": "ts-node-dev --exit-child --watch src --poll src/index.ts",
     "test": "jest --watch",
-    "testCI": "jest"
+    "testCI": "jest",
+    "build": "npx tsc",
+    "startjs": "cd /app/dist && node index.js"
   },
   "license": "MIT",
   "dependencies": {

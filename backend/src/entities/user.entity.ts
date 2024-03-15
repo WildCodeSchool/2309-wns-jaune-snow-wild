@@ -9,7 +9,7 @@ import {
 import { Field, InputType, Int, ObjectType } from "type-graphql";
 import * as argon2 from "argon2";
 
-import { Length, IsEmail, Min, Max } from "class-validator";
+import { IsEmail, Min, Max } from "class-validator";
 import Reservation from "./reservation.entity";
 
 export enum UserRoleEnum {
@@ -57,7 +57,7 @@ export default class User {
   @Column()
   @Min(10)
   @Max(10)
-  phone: string; //c'est pas int mais number
+  phone: string;
 
   @Field()
   @Column({
