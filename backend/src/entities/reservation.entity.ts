@@ -5,13 +5,17 @@ import {
   OneToMany,
   ManyToMany,
   PrimaryGeneratedColumn,
-  JoinTable,
+  JoinColumn,
 } from "typeorm";
-import { Field, ObjectType } from "type-graphql";
+import { Field, ID, InputType, ObjectType } from "type-graphql";
 import User from "./user.entity";
 import Material from "./material.entity";
+import {
+  ReservationMaterial,
+  CreateReservationMaterialInput,
+} from "./reservation_material.entity";
 
-enum StatutReservation {
+export enum StatutReservation {
   AWAITING = "en_attente",
   CONFIRMATION = "confirmée",
   PAID = "payée",
@@ -24,19 +28,15 @@ enum StatutReservation {
 export default class Reservation {
   @Field()
   @PrimaryGeneratedColumn("uuid")
-  id: number;
+  id: string;
 
-  @Field()
-  @ManyToOne(() => User, (user) => user.id)
-  user: User;
-
-  @JoinTable()
-  @ManyToMany(() => User, (m) => m.id)
-  material: Material;
+  @Field(() => User)
+  @ManyToOne(() => User, (user) => user.reservations)
+  userId: string;
 
   @Field()
   @Column()
-  debut_date: Date;
+  start_date: Date;
 
   @Field()
   @Column()
@@ -53,6 +53,36 @@ export default class Reservation {
     default: StatutReservation.AWAITING,
   })
   status: StatutReservation;
+
+  @Field(() => [ReservationMaterial])
+  @JoinColumn()
+  @OneToMany(() => ReservationMaterial, (r) => r.id)
+  reservationMaterials: ReservationMaterial[];
 }
 
-// Hellp
+@InputType()
+export class ReservationMaterialInput {
+  @Field()
+  quantity: number;
+
+  @Field()
+  materialId: string;
+
+  @Field()
+  unit_price: number;
+}
+
+@InputType()
+export class CreateReservationInput {
+  @Field()
+  userId: string; // Identifiant de l'utilisateur qui effectue la réservation
+
+  @Field(() => [ReservationMaterialInput])
+  materials: ReservationMaterialInput[]; // Liste des matériels réservés avec leur quantité
+
+  @Field()
+  start_date: Date;
+
+  @Field()
+  end_date: Date;
+}
