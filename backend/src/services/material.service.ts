@@ -58,24 +58,24 @@ export default class MaterialService {
   async updateMaterial(id: string, data: Omit<UpdateMaterialInput, 'id'>){
     const categoryToLink = await new CategoryService().find(
         data?.category?.id
-      );
-  
-      const materialToUpdate = await this.find(id);
-      if (!materialToUpdate) {
-        throw new Error("L'annonce n'existe pas!");
-      }
+    );
 
-      const materialToSave = this.db.merge(materialToUpdate, {
-        ...data,
-        category: categoryToLink
-      });
-      
-      const errors = await validate(materialToSave);
-      if (errors.length !== 0) {
-        console.log(errors);
-        throw new Error('il y a eu une erreur');
-      }
-  
-      return await this.db.save(materialToSave);
+    const materialToUpdate = await this.find(id);
+    if (!materialToUpdate) {
+      throw new Error("L'annonce n'existe pas!");
+    }
+
+    const materialToSave = this.db.merge(materialToUpdate, {
+      ...data,
+      category: categoryToLink
+    });
+    
+    const errors = await validate(materialToSave);
+    if (errors.length !== 0) {
+      console.log(errors);
+      throw new Error('il y a eu une erreur');
+    }
+
+    return await this.db.save(materialToSave);
   }
 }

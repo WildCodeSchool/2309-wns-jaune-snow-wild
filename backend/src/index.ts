@@ -14,7 +14,13 @@ import { buildSchema } from "type-graphql";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import "reflect-metadata";
 import CategoryResolver from "./resolvers/category.resolver";
-interface MyContext {}
+import User from "./entities/user.entity";
+
+export interface MyContext {
+  req: express.Request;
+  res: express.Response;
+  user?: User | null;
+}
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -43,7 +49,11 @@ async function main() {
     express.json(),
     // expressMiddleware accepts the same arguments:
     // an Apollo Server instance and optional configuration options
-    expressMiddleware(server, {})
+    expressMiddleware(server, {
+      context: async ({ req, res }) => {
+        return { req, res };
+      },
+    })
   );
   await datasource.initialize();
   await new Promise<void>((resolve) =>
