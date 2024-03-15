@@ -21,7 +21,6 @@ export default class UserResolver {
 
   @Query(() => Message)
   async login(@Arg("infos") infos: InputLogin, @Ctx() ctx: MyContext) {
-    console.log("ctx res-------->", ctx.req );
     const user = await new UserService().findUserByEmail(infos.email);
     if (!user) {
       throw new Error("Vérifiez vos informations");
@@ -33,7 +32,7 @@ export default class UserResolver {
         .setProtectedHeader({ alg: "HS256", typ: "jwt" })
         .setExpirationTime("2h")
         .sign(new TextEncoder().encode(`${process.env.JWT_SECRET_KEY}`));
-      console.log('token: ', token)
+
       if (ctx && ctx.req && ctx.res) {
         let cookies = new Cookies(ctx.req, ctx.res);
         cookies.set("token", token, { httpOnly: true });
