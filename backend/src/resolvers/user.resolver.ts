@@ -11,13 +11,7 @@ import * as argon2 from "argon2";
 import { SignJWT } from "jose";
 import express from "express";
 import Cookies from "cookies";
-
-export interface MyContext {
-  req: express.Request;
-  res: express.Response;
-  user: User | null;
-}
-
+import { MyContext } from "..";
 @Resolver()
 export default class UserResolver {
   @Query(() => [User])
@@ -43,6 +37,7 @@ export default class UserResolver {
         let cookies = new Cookies(ctx.req, ctx.res);
         cookies.set("token", token, { httpOnly: true });
       }
+
       m.message = "Bienvenue!";
       m.success = true;
     } else {
