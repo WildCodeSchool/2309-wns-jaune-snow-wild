@@ -1,9 +1,6 @@
 # test if ci
 name: test-ci
 on: 
-  push: 
-    branches:
-      [!develop, !main]
   pull_request:
     branches:
       [develop,main]
@@ -18,9 +15,9 @@ jobs:
         - name: install
           run: cd backend && npm i
         - name: ESLint
-          run: npm run fix .
+          run: cd backend && npm run fix .
         - name: Prettier
-          run: npm prettier --write .
+          run: cd backend && npm prettier --write .
 
     test-back: 
         runs-on: ubuntu-latest
