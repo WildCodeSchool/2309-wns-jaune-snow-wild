@@ -14,11 +14,7 @@ jobs:
             node-version: '20'
         - name: install
           run: cd backend && npm i
-<<<<<<< HEAD
-        - name: ESLint
-=======
         - name: ESLint init and run fix
->>>>>>> 02bf158 (test ESLInt with init and run fix)
           run: cd backend && npm init @eslint/config && npm run fix .
         - name: Prettier
           run: cd backend && npm prettier --write .
