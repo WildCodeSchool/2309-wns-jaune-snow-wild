@@ -13,10 +13,10 @@ export default class ReservationMaterialResolver {
     return await new ReservationMaterialService().listReservationsMaterial()
   }
 
-  @Query(() => [ReservationMaterial])
+  @Query(() => Boolean)
   async reservationMaterialBetweenDates(
     @Arg('data') data: FindReservationMaterialsBetweenTwoDateInput
-  ) {
+  ): Promise<boolean> {
     return await new ReservationMaterialService().findAllReservationMaterialBetweenUserDate(
       data
     )

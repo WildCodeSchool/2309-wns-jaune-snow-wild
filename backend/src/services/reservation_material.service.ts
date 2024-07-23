@@ -31,14 +31,16 @@ export default class ReservationMaterialService {
 
   async findAllReservationMaterialBetweenUserDate(
     data: FindReservationMaterialsBetweenTwoDateInput
-  ) {
+  ): Promise<boolean> {
     const { materialId, from_date, to_date } = data
     const materialData: Material = await new MaterialService().findMaterialById(
       materialId
     )
+
     if (!materialData) {
       throw new Error('Materiel inconnu')
     }
+
     const reservationMaterials = await this.db.find({
       where: {
         material: { id: materialId },
@@ -49,7 +51,29 @@ export default class ReservationMaterialService {
       },
       relations: ['reservation'],
     })
-    return reservationMaterials
+
+    const reservedQuantitiesBySize: { [key: string]: number } = {}
+
+    reservationMaterials.forEach((reservationMaterial) => {
+      const { size: selectedSize, quantity } = reservationMaterial
+
+      if (selectedSize in reservedQuantitiesBySize) {
+        reservedQuantitiesBySize[selectedSize] += quantity
+      } else {
+        reservedQuantitiesBySize[selectedSize] = quantity
+      }
+    })
+
+    for (const sizeInfo of materialData.sizes) {
+      const { size, quantity: stockQuantity } = sizeInfo
+      const reservedQuantity = reservedQuantitiesBySize[size] || 0
+
+      if (reservedQuantity > stockQuantity) {
+        return false
+      }
+    }
+
+    return true
   }
 
   async findReservationMaterial(id: string) {
