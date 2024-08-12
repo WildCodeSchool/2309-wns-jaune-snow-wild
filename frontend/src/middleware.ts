@@ -41,10 +41,10 @@ async function checkToken(token: string | undefined, request: NextRequest) {
     if (currentRoute && currentRoute.protected !== "PUBLIC") {
       response = NextResponse.redirect(new URL("/auth/login", request.url));
     }
+
     response.cookies.delete("email");
     response.cookies.delete("role");
     response.cookies.delete("userId");
-    
 
     return response;
   }
@@ -52,14 +52,12 @@ async function checkToken(token: string | undefined, request: NextRequest) {
 
   try {
     const { email, role, userId } = await verify(token);
-
     if (currentRoute?.protected === "ADMIN" && role !== "ADMIN") {
       response = NextResponse.redirect(new URL("/errors", request.url)); // redirige sur la Page error
     }
 
     if (email && role && userId) {
       //On vérifie que le role de l'utilisateur est "ADMIN" pour les routes "ADMIN"
-
       if (currentRoute?.protected === "ADMIN" && role !== "ADMIN") {
         response = NextResponse.redirect(new URL("/errors", request.url)); // Créer une page "Access denied"
       } 
@@ -70,26 +68,15 @@ async function checkToken(token: string | undefined, request: NextRequest) {
       response.cookies.set("userId", userId);
 
       if (currentRoute?.protected === "ADMIN" && role === "ADMIN") {
-        console.log(request.nextUrl.pathname);
+        return response;
+      } else {
+        return NextResponse.redirect(new URL("/errors", request.url));
       }
 
-      return response;
+      
     }
     return NextResponse.redirect(new URL("/auth/login", request.url));
-    //penser au cas de figure où il a un token valide, il se rend sur une route admin, mais n'a pas le rôle admin pour y accéder => rediriger vers un "Not Authorized"
-    // return NextResponse.redirect(new URL("/auth/login", request.url));
-    // } catch (err) {
-    //   console.log('%c⧭', 'color: #e50000', err);
-    //   console.log("ERROR");
-    //   if (request.nextUrl.pathname.startsWith("/auth/login")) {
-    //     response = NextResponse.next();
-    //   } else {
-    //     response = NextResponse.redirect(new URL("/auth/login", request.url));
-    //   }
-    //   response.cookies.delete("token");//suppression du token s'il n'est pas valide (puisque l'on tombe dans le catch)
 
-    //   return response;
-    //
   } catch (err) {
     console.error("Verification echouée", err);
     response = NextResponse.redirect(new URL("/auth/login", request.url));

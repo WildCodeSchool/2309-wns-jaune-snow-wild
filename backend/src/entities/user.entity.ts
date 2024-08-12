@@ -1,5 +1,5 @@
 import * as argon2 from 'argon2'
-import { Field, InputType, ObjectType } from 'type-graphql'
+import { Field, InputType, ObjectType, ID } from 'type-graphql'
 import {
   BeforeInsert,
   BeforeUpdate,
@@ -10,7 +10,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm'
 
-import { IsEmail, Max, Min } from 'class-validator'
+import { IsEmail, Max, MinLength} from 'class-validator'
 import { UserRoleEnum } from '../types'
 import Reservation from './reservation.entity'
 
@@ -56,8 +56,6 @@ export default class User {
 
   @Field()
   @Column()
-  @Min(10)
-  @Max(10)
   phone: string
 
   @Field()
@@ -153,4 +151,80 @@ export class InputChangePassword {
 
   @Field({ nullable: false })
   password: string
+}
+
+@InputType()
+export class AdminInputRegister extends User {
+  @Field({ nullable: false })
+  firstName: string
+
+  @Field({ nullable: false })
+  lastName: string
+
+  @Field({ nullable: false })
+  email: string
+
+  @Field({ nullable: false })
+  password: string
+
+  @Field({ nullable: false })
+
+  @Max(10)
+  phone: string
+
+  @Field({ nullable: false })
+  role: UserRoleEnum
+}
+
+@ObjectType()
+export class AdminUserWithoutPassword
+  implements
+    Omit<
+      User,
+      'password' | 'reservations'
+    >
+{
+  @Field()
+  id: string
+
+  @Field()
+  firstName: string
+
+  @Field()
+  lastName: string
+
+  @Field({nullable: true})
+  phone: string
+
+  @Field()
+  email: string
+
+  @Field(() => String)
+  role: UserRoleEnum
+}
+
+@InputType()
+export class UpdateAdminUserInput {
+  @Field(() => ID)
+  id: string
+
+  @Field({ nullable: false })
+  firstName: string
+
+  @Field({ nullable: false })
+  lastName: string
+
+  @Field({ nullable: false })
+  email: string
+
+  @Field({ nullable: false })
+  password: string
+
+  @Field({ nullable: false })
+
+  @Max(10)
+  phone: string
+
+  @Field({ nullable: false })
+  role: UserRoleEnum
 }

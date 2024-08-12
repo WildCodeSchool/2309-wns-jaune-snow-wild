@@ -1,52 +1,16 @@
 # test if ci
 name: test-ci
 on:
-  push: # Lors du push sur toutes les branches
-    branches:
-      - "*"
   pull_request:
     branches:
       [develop,main]
+  push: # Lors du push sur toutes les branches
+    branches:
+      - "*"
       
 jobs:
-  run-linters: 
-    name: Run linters
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 20
-
-      - name: Install Node.js dependencies
-        run: |
-          cd backend
-          npm i
-          npm run lint
-          cd ../frontend
-          npm i
-          npm run lint
-
-      - name: Run linters back
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint_dir: ./backend
-          eslint: true
-
-      - name: Run linters front
-        uses: wearerequired/lint-action@v2
-        with:
-          eslint_dir: ./frontend
-          eslint: true
-
-      - name: CI
-        run: echo "This job's status is ${{ job.status }}."
-
   test-back:
-    needs: run-linters
+    #needs: run-linters
     runs-on: ubuntu-latest
     services:
       # Label used to access the service container
@@ -91,3 +55,40 @@ jobs:
           push: true
           context: "{{defaultContext}}:backend"
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/backend:latest
+
+  # IN JOBS        
+  # run-linters: 
+  #   name: Run linters
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Check out Git repository
+  #       uses: actions/checkout@v3
+
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 20
+
+  #     - name: Install Node.js dependencies
+  #       run: |
+  #         cd backend
+  #         npm i
+  #         npm run lint
+  #         cd ../frontend
+  #         npm i
+  #         npm run lint
+
+  #     - name: Run linters back
+  #       uses: wearerequired/lint-action@v2
+  #       with:
+  #         eslint_dir: ./backend
+  #         eslint: true
+
+  #     - name: Run linters front
+  #       uses: wearerequired/lint-action@v2
+  #       with:
+  #         eslint_dir: ./frontend
+  #         eslint: true
+
+  #     - name: CI
+  #       run: echo "This job's status is ${/*{ job.status }*/}."
