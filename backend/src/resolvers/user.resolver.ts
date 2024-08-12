@@ -11,7 +11,6 @@ import User, {
 } from "../entities/user.entity";
 import UserService from "../services/user.service";
 
-import { Payload } from "../";
 @Resolver()
 export default class UserResolver {
   @Query(() => [User])
@@ -57,6 +56,12 @@ export default class UserResolver {
     }
 
     return user;
+  }
+
+  @Query(() => User)
+  async getUserById(@Arg('id') id: string) {
+    const user = await new UserService().findUserById(id)
+    return user
   }
 
   @Query(() => Message)

@@ -7,10 +7,15 @@ export default class UserService {
   constructor() {
     this.db = datasource.getRepository(User)
   }
-  async findUser(id: string) {
-    const user = await this.db.findOneBy({ id })
+  async findUserById(id: string) {
+    const user = await this.db.findOne({ 
+      where: { id },
+      relations: {
+        reservations: true
+      }
+    })
     if (!user) {
-      throw new Error("Ce matériel n'existe pas")
+      throw new Error("Ce user n'existe pas")
     }
     return user
   }
@@ -41,7 +46,7 @@ export default class UserService {
   }
 
   async deleteUser(id: string) {
-    const user = (await this.findUser(id)) as User
+    const user = (await this.findUserById(id)) as User
     await this.db.remove(user)
     return { ...user, id }
   }
