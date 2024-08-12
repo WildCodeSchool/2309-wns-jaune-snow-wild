@@ -68,13 +68,14 @@ async function checkToken(token: string | undefined, request: NextRequest) {
       response.cookies.set("userId", userId);
 
       if (currentRoute?.protected === "ADMIN" && role === "ADMIN") {
+        console.log(request.nextUrl.pathname);
         return response;
-      } else {
-        return NextResponse.redirect(new URL("/errors", request.url));
-      }
-
+      } 
       
+
+      return response;	
     }
+      
     return NextResponse.redirect(new URL("/auth/login", request.url));
 
   } catch (err) {
