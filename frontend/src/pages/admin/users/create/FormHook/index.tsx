@@ -26,7 +26,7 @@ import { PhoneInput } from "@/components/ui/phone-input";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator, CommandShortcut } from "@/components/ui/command";
 import { CalendarIcon, RocketIcon } from "lucide-react";
 import { FaceIcon, PersonIcon, EnvelopeClosedIcon, GearIcon } from "@radix-ui/react-icons";
-
+import { useRouter } from "next/router";
 const phoneValidation = new RegExp(/(?:([+]\d{1,4})[-.\s]?)?(?:[(](\d{1,3})[)][-.\s]?)?(\d{1,4})[-.\s]?(\d{1,4})[-.\s]?(\d{1,9})/g);
 // console.log(phoneValidation.test('+330612345678'))
 // Minimum 8 characters, at least one uppercase letter, one lowercase letter, one number and one special character
@@ -58,6 +58,7 @@ const formSchema = z.object({
 })
 
 export function FormHook() {
+  const router = useRouter();
   const [createUser, {data, loading, error}] = useMutation(CREATE_USERS_BY_ADMIN, {
     fetchPolicy: "no-cache"
   })
@@ -91,6 +92,7 @@ export function FormHook() {
           title: "Success",
           description: "You successfully registred a new user",
         })
+        router.push("/admin/users");
       },
       onError: (err) => {
         console.log("error")
@@ -146,7 +148,7 @@ export function FormHook() {
                   <FormItem
                     className="mb-3"
                   >
-                    <FormLabel>Last name</FormLabel>
+                    <FormLabel>Email</FormLabel>
                     <FormControl>
                       <Input
                         type="email" 
