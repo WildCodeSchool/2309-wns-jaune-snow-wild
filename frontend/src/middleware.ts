@@ -71,6 +71,7 @@ async function checkToken(token: string | undefined, request: NextRequest) {
 
       if (currentRoute?.protected === "ADMIN" && role === "ADMIN") {
         console.log(request.nextUrl.pathname);
+        return response;
       }
 
       return response;
