@@ -11,19 +11,20 @@ function StepperFormActions({
   const backToHomePage = () => {
     router.push("/");
   };
+  
   return (
-    <div className="w-full flex  justify-center items-center gap-2">
+    <div className="w-full flex justify-center mt-4 items-center gap-2">
       <>
         <Button
           type="submit"
           onClick={handleSubmit}
-          className="my-2 mx-2  bg-green-500 text-white rounded hover:bg-green-700"
+          className="my-2 mx-2 w-full bg-neutral-900 text-white rounded-full hover:bg-green-700"
         >
-          Créer la réservation et payer
+          Réserver et payer
         </Button>
         <Button
           onClick={backToHomePage}
-          className=" bg-red-500 text-white rounded hover:bg-red-700"
+          className=" bg-red-500 text-white rounded-full w-full hover:bg-red-700"
         >
           Abandonner
         </Button>

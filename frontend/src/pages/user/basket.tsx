@@ -1,4 +1,3 @@
-
 /* eslint-disable @next/next/no-img-element */
 import { AuthContext } from "@/contexts/authContext";
 import { useCart } from "@/contexts/CartContext";
@@ -9,16 +8,16 @@ import { useContext, useState } from "react";
 const Basket: React.FC = () => {
   const { cart, removeFromCart, updateQuantity } = useCart();
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const [itemToRemove, setItemToRemove] = useState<string | null>(null);
+  const [itemIdToRemove, setItemIdToRemove] = useState<string | null>(null);
+  const [itemSizeToRemove, setItemSizeToRemove] = useState<string | null>(null);
+
   const router = useRouter();
   const { user } = useContext(AuthContext);
-  const handleQuantityChange = (id: string, newQuantity: number) => {
-    updateQuantity(id, newQuantity);
-  };
 
-  const confirmRemoveItem = (id: string) => {
+  const confirmRemoveItem = (id: string, selectedSize: string) => {
     setShowConfirmation(true);
-    setItemToRemove(id);
+    setItemIdToRemove(id);
+    setItemSizeToRemove(selectedSize);
   };
 
   const handleCheckout = () => {
@@ -30,15 +29,16 @@ const Basket: React.FC = () => {
   };
 
   const handleRemoveItem = () => {
-    if (itemToRemove) {
-      removeFromCart(itemToRemove);
-      setItemToRemove(null);
+    if (itemIdToRemove && itemSizeToRemove) {
+      removeFromCart(itemIdToRemove, itemSizeToRemove);
+      setItemIdToRemove(null);
+      setItemSizeToRemove(null);
       setShowConfirmation(false);
     }
   };
 
   const handleCancelRemove = () => {
-    setItemToRemove(null);
+    setItemIdToRemove(null);
     setShowConfirmation(false);
   };
   const numberOfArticleText = "Nombre d'articles";
@@ -72,8 +72,8 @@ const Basket: React.FC = () => {
         <div className="space-y-4">
           {cart.map((item) => (
             <div
-              key={item.id}
-              className="bg-white flex rounded-lg shadow-lg overflow-hidden"
+              key={`${item.id}-${item.selectedSize}`}
+              className="bg-white flex rounded-lg  overflow-hidden"
             >
               <div className="relative h-48">
                 <img
@@ -82,18 +82,24 @@ const Basket: React.FC = () => {
                   alt={item.name}
                 />
               </div>
-              <div className="p-6 flex justify-between items-start">
+              <div className="p-6 flex justify-between items-center">
+               
                 <div>
                   <h2 className="text-2xl font-bold mb-2">{item.name}</h2>
-                  <p className="text-gray-700">{item.description}</p>
-                  <p className="text-gray-700">{item.price}€</p>
-                  <p className="text-gray-700">Taille : {item.selectedSize}</p>
-                  <div className="mt-4 flex items-center">
+                  <p className="text-gray-700 w-9/12">{item.description}</p>
+                  
+                  <div className=" flex mt-5 items-center gap-6 ">
+                  <p className="text-gray-700">Taille : <span className="underline">{item.selectedSize}</span></p>
+                  <div className="flex items-center">
                     <span className="mr-2">Quantité:</span>
                     <select
                       value={item.quantity}
                       onChange={(e) =>
-                        handleQuantityChange(item.id, parseInt(e.target.value))
+                        updateQuantity(
+                          item.id,
+                          item.selectedSize,
+                          parseInt(e.target.value)
+                        )
                       }
                       className="px-2 py-1 border rounded"
                     >
@@ -103,22 +109,26 @@ const Basket: React.FC = () => {
                         </option>
                       ))}
                     </select>
-                  </div>
-                </div>
-                <button
-                  onClick={() => confirmRemoveItem(item.id)}
+                   
+                  </div> 
+                  <button
+                  onClick={() => confirmRemoveItem(item.id, item.selectedSize)}
                   className="ml-4 text-red-500 hover:text-red-700"
                 >
-                  &#x2715;
+                  supprimer 
                 </button>
+                  </div>
+                </div> 
+                <p className="text-gray-700 text-xl font-bold">{item.price}€</p>
+                
               </div>
             </div>
           ))}
         </div>
       </div>
       <div className="col-span-1">
-        <div className="bg-white p-5 rounded-lg shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">Récapitulatif</h2>
+        <div className="bg-white p-5 rounded-lg ">
+          <h2 className="text-2xl font-bold mb-6">Récapitulatif</h2>
           <div className="flex justify-between items-center border-b-2 pb-2">
             <p className="text-gray-700">{numberOfArticleText}</p>
             <p className="text-gray-700">{totalItems}</p>
@@ -129,12 +139,12 @@ const Basket: React.FC = () => {
           </div>
           <button
             onClick={handleCheckout}
-            className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700 mt-4 w-full"
+            className="p-4 bg-neutral-900 w-full text-white rounded-full hover:bg-neutral-700 mt-6 "
           >
             Finaliser la commande
           </button>
           <Link href="/">
-            <div className="mt-4 text-center text-blue-500 hover:underline">
+            <div className="mt-4 text-center text-neutral-900 hover:underline">
               Continuer vos achats
             </div>
           </Link>

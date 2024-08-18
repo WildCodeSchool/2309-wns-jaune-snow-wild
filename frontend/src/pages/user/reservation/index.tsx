@@ -2,6 +2,7 @@
 import { Step, Stepper } from "@/components/stepper";
 import "react-datepicker/dist/react-datepicker.css";
 import ReservationDateStep from "./ReservationDateStep";
+import ReservationPaiementStep from "./ReservationPaiementStep";
 
 const steps = [
   { label: "Step 1", description: "Choix des dates" },
@@ -10,7 +11,7 @@ const steps = [
 
 export default function StepperForm() {
   return (
-    <div className="flex w-full flex-col gap-4">
+    <div className="flex w-full flex-col gap-4 mt-8">
       <Stepper variant="circle-alt" initialStep={0} steps={steps}>
         {steps.map((stepProps, index) => {
           if (index === 0) {
@@ -22,7 +23,8 @@ export default function StepperForm() {
           }
           return (
             <Step key={stepProps.label} {...stepProps}>
-              Paiement{/* <ReservationPaiementStep /> */}
+             {
+               <ReservationPaiementStep /> }
             </Step>
           );
         })}
