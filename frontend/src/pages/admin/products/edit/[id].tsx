@@ -17,7 +17,7 @@ import {
 } from '@/components/ui/form';
 import { Label } from "@/components/ui/label";
 import { Input } from '@/components/ui/input';
-import { SkiSizes, SnowboardSizes, BootsSizes, ClothSizes, StickSizes } from '@/pages/admin/constantes';
+import { SkiSizes, SnowboardSizes, BootsSizes, ClothSizes, StickSizes } from '@/admin/constantes';
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CategoryType } from "@/types";
@@ -341,7 +341,7 @@ const EditProductAdmin = () => {
               render={({ field }) => (
                 <FormItem 
                   className="mb-3"
-                  onChange={(e: Event) => { field.onChange(e.target?.value)}}>
+                  onChange={(e: any) => { field.onChange(e.target?.value)}}>
                   <FormLabel>Description</FormLabel>
                   <FormControl>
                     <Textarea
@@ -416,8 +416,6 @@ const EditProductAdmin = () => {
                     <FormLabel>Category</FormLabel>
                     
                     <Select
-                
-                      
                       onValueChange={(value) => { 
                         handleChangeCategory(value, field) 
                       }}
@@ -435,7 +433,7 @@ const EditProductAdmin = () => {
                       
                       >
                         <SelectGroup>
-                          {!loading && data?.categories.map((c: CategoryType, index) => {
+                          {!loading && data?.categories.map((c: CategoryType, index: number) => {
                             return (
                               <SelectItem 
                                 key={`category_${c.id}_${index}`}

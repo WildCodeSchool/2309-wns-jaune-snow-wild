@@ -155,6 +155,29 @@ const ProductsAdminPage = () => {
       }
     },
     {
+      accessorKey: "price",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => {
+                console.log(column.getIsSorted() === "desc")
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            }
+          >
+            Price
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+      cell: ({ row }) => {
+        console.log('row:',row)
+        return (
+          <div className="lowercase">{row.original.price}</div>
+        )}
+    },
+    {
       header: "Action",
       cell: ({ row }) => {
         // console.log('row: ', row)

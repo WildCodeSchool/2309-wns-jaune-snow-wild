@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useQuery, useMutation } from "@apollo/client"
 import { LIST_CATEGORIES } from "@/requetes/queries/category.queries"
 import { CREATE_MATERIAL_ADMIN } from '@/requetes/mutations/material.mutations';
-import { SkiSizes } from '../../constantes';
+import { SkiSizes } from '../../../../admin/constantes';
 import { Card, CardContent, CardHeader, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 

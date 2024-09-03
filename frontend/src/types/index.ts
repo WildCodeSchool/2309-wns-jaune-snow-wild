@@ -1,4 +1,4 @@
-import { SkiSizes, SnowboardSizes, BootsSizes, ClothSizes, StickSizes } from "@/pages/admin/constantes";
+import { SkiSizes, SnowboardSizes, BootsSizes, ClothSizes, StickSizes } from "@/admin/constantes";
 import { ReservationMaterialInput } from "./reservation";
 
 export type CategoryType = {

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Bell, Home, LineChart, Package, Package2, ShoppingCart, Users } from "lucide-react";
+import { Bell, Home, LineChart, Package, Package2, ShoppingCart, Users, } from "lucide-react";
 import { useRouter } from "next/router";
 type LinkType = {
   name: string,
@@ -27,7 +27,13 @@ const links = [
     name: 'Reservations',
     link: '/admin/reservations',
     icon: <ShoppingCart className="h-4 w-4"/>
-  }
+  },
+  {
+    name: 'Categories',
+    link: '/admin/categories',
+    icon: <Package2 className="h-4 w-4"/>
+  },
+  
 ]
 
 const Navigation =() => {

@@ -1,4 +1,5 @@
 import { ApolloServer } from '@apollo/server'
+import { uuid } from 'uuidv4'
 import {
   IMockStore,
   addMocksToSchema,
@@ -28,9 +29,13 @@ import type {
   ResponseData,
 } from '../type_tests'
 
+const id1 = uuid();
+const id2 = uuid();
+const id3 = uuid();
+
 const categoryData: Category[] = [
-  { id: '1', name: 'Catégorie 1', material: [] },
-  { id: '2', name: 'Catégorie 2', material: [] },
+  { id: id1, name: 'Catégorie 1', material: [] },
+  { id: id2, name: 'Catégorie 2', material: [] },
 ]
 
 let server: ApolloServer
@@ -58,8 +63,8 @@ beforeAll(async () => {
     },
     Mutation: {
       createCategory(_: null, { data }: { data: CreateCategoryInput }) {
-        store.set('Category', '3', data)
-        return store.get('Category', '3')
+        store.set('Category', id3, data)
+        return store.get('Category', id3)
       },
       deleteCategory(_: null, { id }: { id: string }) {
         const categoryToDelete = store.get('Category', id)
@@ -109,7 +114,7 @@ describe('Test sur les catégorie', () => {
     assert(createResponse.body.kind === 'single')
     expect(createResponse.body.singleResult.data).toEqual({
       createCategory: {
-        id: '3',
+        id: id3,
         name: 'Categorie 3',
       },
     })
@@ -118,13 +123,13 @@ describe('Test sur les catégorie', () => {
     const recupResponse = await server.executeOperation<ResponseData>({
       query: FIND_CATEGORY_BY_ID,
       variables: {
-        findCategoryId: '2',
+        findCategoryId: id2,
       },
     })
     assert(recupResponse.body.kind === 'single')
     expect(recupResponse.body.singleResult.data).toEqual({
       findCategory: {
-        id: '2',
+        id: id2,
         name: 'Catégorie 2',
       },
     })
@@ -134,13 +139,13 @@ describe('Test sur les catégorie', () => {
     const deleteResponse = await server.executeOperation<DeleteResponseData>({
       query: DELETE_CATEGORY,
       variables: {
-        deleteCategoryId: '1',
+        deleteCategoryId: id1,
       },
     })
     assert(deleteResponse.body.kind === 'single')
     expect(deleteResponse.body.singleResult.data).toEqual({
       deleteCategory: {
-        id: '1',
+        id: id1,
         name: 'Catégorie 1',
       },
     })

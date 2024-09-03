@@ -61,8 +61,8 @@ async function main() {
     '/',
     cors<cors.CorsRequest>({
       origin: [
-        'http://localhost:3000',
-        'http://localhost:8000',
+        process.env.FRONT_END_URL || 'http://localhost:3000',
+        process.env.SERVICE_IMAGES_URL || 'http://localhost:8000',
       ],
       credentials: true,
     }),
@@ -89,9 +89,9 @@ async function main() {
   )
   await datasource.initialize()
   await new Promise<void>((resolve) =>
-    httpServer.listen({ port: 4000 }, resolve)
+    httpServer.listen({ port: process.env.PORT }, resolve)
   )
-  console.log(`🚀 Server lancé sur http://localhost:4000/`)
+  console.log(`🚀 Server lancé sur http://localhost:${process.env.PORT}/`)
 }
 
 main()

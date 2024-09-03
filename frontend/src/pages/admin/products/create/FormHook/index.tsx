@@ -23,7 +23,7 @@ import {
 import { Card, CardHeader, CardFooter, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { CategoryType } from '@/types';
-import { SkiSizes, SnowboardSizes, BootsSizes, ClothSizes, StickSizes } from '@/pages/admin/constantes';
+import { SkiSizes, SnowboardSizes, BootsSizes, ClothSizes, StickSizes } from '@/admin/constantes';
 import axios from 'axios';
 import { CircleX } from 'lucide-react';
 import SizeLabel from '@/admin/components/SizeLabel';

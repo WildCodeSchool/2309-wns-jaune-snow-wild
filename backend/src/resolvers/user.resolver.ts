@@ -93,6 +93,18 @@ export default class UserResolver {
     return newUser;
   }
 
+  @Mutation(() => UserWithoutPassword)
+  async deleteUser(@Arg("id") id: string) {
+    const user = await new UserService().findUserById(id);
+    console.log('user to delete: ', user)
+    if (!user) {
+      throw new Error("Cet utilisateur n'existe pas!");
+    }
+
+    const deletedUser = await new UserService().deleteUser(id);
+    return deletedUser;
+  }
+
   @Mutation(() => UpdateUserWithoutPassword)
   async updateUser(@Arg("infos") infos: InputAdminUpdateUser, @Arg('id') id: string) {
     const user = await new UserService().findUserByEmail(infos.email);

@@ -16,7 +16,6 @@ mutation AdminRegister($infos: AdminInputRegister!) {
 export const DELETE_USER_BY_ADMIN = gql`
   mutation DeleteAdminUser($deleteAdminUserId: String!) {
     deleteAdminUser(id: $deleteAdminUserId) {
-      id
       firstName
       email
       lastName

@@ -8,7 +8,7 @@ import type { AppProps } from "next/app";
 import "@/styles/globals.css";
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000",
+  uri: process.env.NEXT_PUBLIC_BACK_URL,
   cache: new InMemoryCache({ addTypename: false }),
   credentials: "include",
 });

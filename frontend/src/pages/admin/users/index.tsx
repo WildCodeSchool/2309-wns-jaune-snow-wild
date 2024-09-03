@@ -35,31 +35,31 @@ const UsersAdminPage = () => {
   });
   const [deleteUser] = useMutation(DELETE_USER_BY_ADMIN, {
     fetchPolicy: "no-cache",
-    //refetchQueries: [{ query: GET_USERS }],
+    // refetchQueries: ['Users']
   });
   const router = useRouter();
   const handleDeleteUser = (id: string) => {
-    console.log('id: ', id)
+    console.log('id to delete: ', id)
     deleteUser({
-    variables: {
-      deleteAdminUserId: id,
-    },
-    onCompleted:(res) => {
-      console.log("SUCCESS TO DELETE")
-      console.log("res: ", res)
+      variables: {
+        deleteAdminUserId: id
+      },
+      onCompleted:(res) => {
+        console.log("SUCCESS TO DELETE")
+        console.log("res: ", res)
       
-      if(res) {
-        console.log('data after result: ', data)
-        data.users = data.users.filter((u: UserType, index: number) => data.users[index].id !== u.id )
-        // router.push("/admin/users")
-      }
-    },
+        if(res) {
+          console.log('data after result: ', data)
+          
+          // data.users = data.users.filter((u: UserType, index: number) => data.users[index].id !== u.id )
+          // router.push("/admin/users")
+        }
+      },
 
-    onError: (error) => {
-      console.log("ERROR", error)
-    },
-    
-  })
+      onError: (error) => {
+        console.log("ERROR", error)
+      },
+    })
   }
 
   console.log('data:', data);

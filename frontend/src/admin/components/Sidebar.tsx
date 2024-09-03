@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Command, CommandGroup, CommandItem, CommandList, CommandSeparator } from "@/components/ui/command";
-import { Bell, Home, LineChart, Package, Package2, ShoppingCart, Users } from "lucide-react"
+import { Bell, Home, LineChart, Package, Package2, ShoppingCart, Users, Locate } from "lucide-react"
 import Link from "next/link"
 
 import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
@@ -13,29 +13,6 @@ type LinkType = {
   link: string,
   icon: JSX.Element,
 }
-
-const links = [
-  {
-    name: 'Dashboard',
-    link: '/admin/dashboard',
-    icon: <Home className="h-4 w-4"/>
-  },
-  {
-    name: 'Users',
-    link: '/admin/users',
-    icon: <Users className="h-4 w-4"/>
-  },
-  {
-    name: 'Products',
-    link: '/admin/products',
-    icon: <Package className="h-4 w-4"/>
-  },
-  {
-    name: 'Reservations',
-    link: '/admin/reservations',
-    icon: <ShoppingCart className="h-4 w-4"/>
-  }
-]
 
 const SideBar = () => {
   const router = useRouter()

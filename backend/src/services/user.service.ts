@@ -51,8 +51,8 @@ export default class UserService {
 
   async deleteUser(id: string) {
     const user = (await this.findUser(id)) as User
-    await this.db.remove(user)
-    return { ...user, id }
+    const deletedUser = await this.db.remove(user)
+    return { ...deletedUser, id }
   }
 
   async updateUser(infos: InputAdminUpdateUser, id:string) {
@@ -61,7 +61,7 @@ export default class UserService {
       ...infos
     })
       
-    
+
     return await this.db.save(userToSave)
   }
 }
