@@ -8,11 +8,12 @@ import assert from 'assert'
 import Category from '../../src/entities/category.entity'
 
 import {
+  FIND_CATEGORY_BY_ID,
   LIST_CATEGORY,
   LIST_CATEGORY_WITH_NAME,
 } from '../requete_tests/queries_tests/category.queries'
 
-import type { ResponseData } from '../type_tests'
+import type { CategoryNameResponseData, ResponseData } from '../type_tests'
 
 const id1 = uuid()
 const id2 = uuid()
@@ -68,16 +69,16 @@ describe('Test sur les categories', () => {
     })
   })
 
-  // it("récupération d'une catégorie avec son nom", async () => {
-  //   const response = await server.executeOperation<CategoryNameResponseData>({
-  //     query: FIND_CATEGORY_BY_ID,
-  //     variables: {
-  //       findCategoryId: '1',
-  //     },
-  //   })
-  //   assert(response.body.kind === 'single')
-  //   expect(response.body.singleResult.data).toEqual({
-  //     findCategory: categoryData[0].id,
-  //   })
-  // })
+  it("récupération d'une catégorie avec son nom", async () => {
+    const response = await server.executeOperation<CategoryNameResponseData>({
+      query: FIND_CATEGORY_BY_ID,
+      variables: {
+        findCategoryId: id1,
+      },
+    })
+    assert(response.body.kind === 'single')
+    expect(response.body.singleResult.data).toEqual({
+      findCategory: categoryData[0].id,
+    })
+  })
 })
