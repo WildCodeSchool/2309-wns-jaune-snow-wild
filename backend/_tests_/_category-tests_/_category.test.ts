@@ -1,5 +1,6 @@
 import { ApolloServer } from '@apollo/server'
 import { buildSchemaSync } from 'type-graphql'
+import { uuid } from 'uuidv4'
 import CategoryResolver from '../../src/resolvers/category.resolver'
 
 import { addMocksToSchema } from '@graphql-tools/mock'
@@ -13,9 +14,11 @@ import {
 
 import type { ResponseData } from '../type_tests'
 
+const id1 = uuid()
+const id2 = uuid()
 const categoryData: Category[] = [
-  { id: '1', name: 'Categorie 1', material: [] },
-  { id: '2', name: 'Catégorie 2', material: [] },
+  { id: id1, name: 'Categorie 1', material: [] },
+  { id: id2, name: 'Catégorie 2', material: [] },
 ]
 
 let server: ApolloServer
@@ -44,7 +47,7 @@ beforeAll(async () => {
   })
 })
 
-describe('Test sur les livres', () => {
+describe('Test sur les categories', () => {
   it('mon premier test', async () => {
     const response = await server.executeOperation<ResponseData>({
       query: LIST_CATEGORY,

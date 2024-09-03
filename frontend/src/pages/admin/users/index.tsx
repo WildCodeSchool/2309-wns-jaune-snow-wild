@@ -1,82 +1,216 @@
-import * as React from "react"
+"use client"
+
+import React, { useEffect, useState, memo } from "react";
 import { GET_USERS } from "@/admin/requetes/queries/users.queries";
-import { useQuery } from "@apollo/client";
+import { useQuery, useLazyQuery } from "@apollo/client";
 import Link from "next/link";
-import { buttonVariants } from "@/components/ui/button"
-
-import { Eye, Pen, Trash } from "lucide-react"
- 
-import { Input } from "@/components/ui/input"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { ColumnDef } from "@tanstack/react-table"
+import { useMutation } from "@apollo/client"
+import { DELETE_USER_BY_ADMIN } from '@/admin/requetes/mutations/user.mutations'; 
+import { useRouter } from "next/router";
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+  CaretSortIcon
+} from "@radix-ui/react-icons";
+import { Eye, Pen, Router, Trash } from "lucide-react"
+import { UserType } from "@/types"
 
-
-type User = {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  role: string;
-}
-
+import { DataTable } from "@/components/data-table";
 
 const UsersAdminPage = () => {
-  const { data, error, loading } = useQuery(GET_USERS);
-  console.log(data);
+  let { data, error, loading } = useQuery(GET_USERS, {
+    fetchPolicy: "cache-and-network",
+  });
+  const [deleteUser] = useMutation(DELETE_USER_BY_ADMIN, {
+    fetchPolicy: "network-only",
+    refetchQueries: [{ query: GET_USERS }]
+  });
+  const router = useRouter();
+  const handleDeleteUser = (id: string) => {
+    console.log('id: ', id)
+    deleteUser({
+    variables: {
+      deleteAdminUserId: id,
+    },
+    onCompleted:(res) => {
+      console.log("SUCCESS TO DELETE")
+      console.log("res: ", res)
+      
+      if(res) {
+        console.log('data after result: ', data)
+        data.users = data.users.filter((u: UserType, index: number) => res.deleteAdminUser.id !== u.id )
+        router.push("/admin/users")
+      }
+    },
 
-  return (
-      <div className="w-full">
-        <div className="flex items-cente bg-white py-4">
-          <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[300px]">User ID</TableHead>
-                  <TableHead>First Name</TableHead>
-                  <TableHead>Last Name</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Role</TableHead>
-                  <TableHead className="text-right">
-                    <Link href="/admin/users/create" className={buttonVariants()}>Add</Link>
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
+    onError: (error) => {
+      console.log("ERROR", error)
+    },
+    
+  })
+  }
 
-              {data && data.users.map((u: User) => {
-                return <TableRow key={`user_${u.id}`}>
-                    <TableCell className="flex-1">{u.id}</TableCell>
-                    <TableCell>{u.firstName}</TableCell>
-                    <TableCell>{u.lastName}</TableCell>
-                    <TableCell className="text-left">{u.email}</TableCell>
-                    <TableCell className="text-left">{u.role}</TableCell>
-                    <TableCell className="text-right">
-                      <div className="flex items-center">
-                        <Link href={`/admin/users/${u.id}`} className="px-1">
-                          <Eye />
-                        </Link>
-                        <Link href={`/admin/users/${u.id}`} className="px-1">
-                          <Pen />
-                        </Link>
-                        <Link href={`/admin/users/${u.id}`} className="px-1">
-                          <Trash />
-                        </Link>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-              })}
-              </TableBody>
-          </Table>
-        </div>
+
+  type User = {
+    id: string
+    firstName: string
+    lastName: string
+    email: string
+    role: string
+  }
+  
+  const columns: ColumnDef<User>[] = [
+    {
+      accessorKey: "firstName",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => {
+                console.log(column.getIsSorted() === "desc")
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            }
+          >
+            Firstname
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className="lowercase">{row.getValue("firstName")}</div>
+    },
+    {
+      accessorKey: "lastName",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => {
+                console.log(column.getIsSorted() === "desc")
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            }
+          >
+            Lastname
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className="lowercase">{row.getValue("lastName")}</div>
+    },
+    {
+      accessorKey: "email",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => {
+                console.log(column.getIsSorted() === "desc")
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            }
+          >
+            Email
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>
+    },
+    {
+      accessorKey: "role",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => {
+                console.log(column.getIsSorted() === "desc")
+                column.toggleSorting(column.getIsSorted() === "asc")
+              }
+            }
+          >
+            Role
+            <CaretSortIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+      cell: ({ row }) => <div className="lowercase">{row.getValue("role")}</div>
+    },
+    {
+      header: "Action",
+      cell: ({ row }) => {
+        // console.log('row: ', row)
+        // console.log('row.original: ', row.original)
+        return (
+          <div className="flex lowercase gap-2">
+  
+           <Link
+              href={`/admin/users/${row.original.id}`}
+            >
+               <div className='
+                flex rounded-full bg-gray-200 shadow-sm p-2
+                hover:bg-black hover:text-white transition-all'
+              >
+                <Eye />
+              </div>
+               
+            </Link>
+  
+            <Link
+              className='rounded-full'
+              href={`/admin/users/edit/${row.original.id}`}
+            >
+              <div className='
+                flex rounded-full bg-gray-200 shadow-sm p-2
+                hover:bg-black hover:text-white transition-all'
+              >
+                <Pen/>
+              </div>
+            </Link>
+  
+            <div
+              onClick={() => {
+                handleDeleteUser(row.original.id)
+              }}
+            >             
+              <div className='
+                flex rounded-full bg-gray-200 shadow-sm p-2
+                hover:bg-black hover:text-white transition-all'
+              >
+                <Trash />
+              </div>
+            </div>
+            {/* <Link href={`/admin/users/${row.original.id}`}>show</Link>
+            <Link href={`/admin/users/edit/${row.original.id}`}>Edit</Link> */}
+  
+          </div>
+        )
+      }
+    }
+  ]
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+  if (error) {
+    return <p>Some Error Occurred...</p>;
+  }
+
+  return data && (
+    <div className="w-full">
+      <div className="flex items-cente bg-white py-4">
+        {data && (
+          <DataTable 
+            columns={columns} 
+            data={data.users}
+            title="List of users"
+            createEntity="users"
+          />
+        )}
       </div>
+    </div>
   );
 };
            
-export default UsersAdminPage;
+export default memo(UsersAdminPage);
 
