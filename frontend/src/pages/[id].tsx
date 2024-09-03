@@ -11,7 +11,7 @@ function MaterialDetail() {
   const router = useRouter();
 
   const [getAd, { data, loading, error }] = useLazyQuery(GET_MATERIAL_BY_ID);
-  console.log(data)
+
   const { addToCart } = useCart();
   const [selectedSize, setSelectedSize] = useState<string>();
 
@@ -40,7 +40,6 @@ function MaterialDetail() {
       const materialWithSize = { ...material, selectedSize };
       addToCart(materialWithSize, selectedSize);
     }
-    
   };
 
   return (

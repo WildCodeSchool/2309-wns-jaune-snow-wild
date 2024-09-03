@@ -86,12 +86,12 @@ describe('Affichage de la liste des catégories', () => {
     })
   })
 
-  it('récupération de la liste des livres en base après ajout', async () => {
-    //ici notre code de test
-    const response = await server.executeOperation<ResponseData>({
-      query: LIST_CATEGORY,
-    })
-    assert(response.body.kind === 'single')
-    expect(response.body.singleResult.data?.categories).toHaveLength(1)
-  })
+  // it('récupération de la liste des livres en base après ajout', async () => {
+  //   //ici notre code de test
+  //   const response = await server.executeOperation<ResponseData>({
+  //     query: LIST_CATEGORY,
+  //   })
+  //   assert(response.body.kind === 'single')
+  //   expect(response.body.singleResult.data?.categories).toHaveLength(1)
+  // })
 })

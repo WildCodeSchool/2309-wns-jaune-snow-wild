@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-export const LIST_MATERIAL= gql`
+export const LIST_MATERIAL = gql`
   query ListMaterials {
     listMaterials {
       category {
@@ -17,8 +17,28 @@ export const LIST_MATERIAL= gql`
         size
       }
     }
-  }`
-;
+  }
+`;
+
+export const AVAILABLE_LIST_MATERIAL = gql`
+  query ListAvailableMaterials($toDate: DateTimeISO!, $fromDate: DateTimeISO!) {
+    listAvailableMaterials(to_date: $toDate, from_date: $fromDate) {
+      category {
+        id
+        name
+      }
+      id
+      name
+      description
+      picture
+      price
+      sizes {
+        quantity
+        size
+      }
+    }
+  }
+`;
 
 export const GET_MATERIAL_BY_ID = gql`
   query FindMaterialById($findMaterialByIdId: String!) {

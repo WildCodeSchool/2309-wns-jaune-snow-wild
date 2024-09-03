@@ -6,6 +6,7 @@ import Material, {
   UpdateMaterialInput,
 } from '../entities/material.entity'
 import CategoryService from './category.service'
+import ReservationMaterialService from './reservation_material.service'
 
 export default class MaterialService {
   db: Repository<Material>
@@ -13,11 +14,39 @@ export default class MaterialService {
     this.db = datasource.getRepository(Material)
   }
 
-
   async listMaterials() {
     return this.db.find({
-      relations: { category: true }
+      relations: { category: true },
     })
+  }
+
+  async listAvailableMaterials(
+    from_date: Date,
+    to_date: Date
+  ): Promise<Material[]> {
+    const allMaterials = await this.db.find({
+      relations: { category: true },
+    }) // Récupérer tous les matériaux
+    const availableMaterials: Material[] = []
+
+    const reservationMaterialService = new ReservationMaterialService()
+
+    for (const material of allMaterials) {
+      const isAvailable =
+        await reservationMaterialService.findAllReservationMaterialBetweenUserDate(
+          {
+            materialId: material.id,
+            from_date,
+            to_date,
+          }
+        )
+
+      if (isAvailable) {
+        availableMaterials.push(material)
+      }
+    }
+
+    return availableMaterials
   }
 
   async findMaterialById(id: string) {
@@ -34,10 +63,9 @@ export default class MaterialService {
   async listByCategory(id: string) {
     return await this.db.find({
       where: { category: { id } },
-      relations: { category: true }
-    });
+      relations: { category: true },
+    })
   }
-
 
   async createMaterial(data: CreateMaterialInput) {
     const categoryToLink = await new CategoryService().find(data?.category?.id)
@@ -67,7 +95,7 @@ export default class MaterialService {
     const categoryToLink = await new CategoryService().find(data?.category.id)
     const materialToUpdate = await this.findMaterialById(id)
     if (!materialToUpdate) {
-      throw new Error("Error, material id not found!")
+      throw new Error('Error, material id not found!')
     }
 
     const materialToSave = this.db.merge(materialToUpdate, {

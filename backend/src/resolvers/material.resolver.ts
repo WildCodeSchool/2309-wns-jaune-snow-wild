@@ -3,9 +3,9 @@ import {
   CreateMaterialInput,
   UpdateMaterialInput,
 } from '../entities/material.entity'
+import CategoryService from '../services/category.service'
 import MaterialService from '../services/material.service'
 import Material from './../entities/material.entity'
-import CategoryService from '../services/category.service'
 
 @Resolver()
 export default class MaterialResolver {
@@ -25,10 +25,21 @@ export default class MaterialResolver {
   async findMaterialByCategories(@Arg('id') id: string) {
     const category = await new CategoryService().find(id)
     if (!category) {
-      throw new Error("La catégorie n'existe pas");
+      throw new Error("La catégorie n'existe pas")
     }
-    const material = await new MaterialService().listByCategory(id);
-    return material;
+    const material = await new MaterialService().listByCategory(id)
+    return material
+  }
+
+  @Query(() => [Material])
+  async listAvailableMaterials(
+    @Arg('from_date') from_date: Date,
+    @Arg('to_date') to_date: Date
+  ): Promise<Material[]> {
+    const fromDate = new Date(from_date)
+    const toDate = new Date(to_date)
+
+    return await new MaterialService().listAvailableMaterials(fromDate, toDate)
   }
 
   @Mutation(() => Material)
@@ -39,13 +50,13 @@ export default class MaterialResolver {
 
   @Mutation(() => Material)
   async deleteMaterial(@Arg('id') id: string) {
-    const deletedMaterial = await new MaterialService().deleteMaterial(id);
+    const deletedMaterial = await new MaterialService().deleteMaterial(id)
     return deletedMaterial
   }
 
   @Mutation(() => Material)
   async updateMaterial(@Arg('data') data: UpdateMaterialInput) {
-    const { id, ...otherData } = data;
+    const { id, ...otherData } = data
     const materialToUpdate = await new MaterialService().updateMaterial(
       id,
       otherData

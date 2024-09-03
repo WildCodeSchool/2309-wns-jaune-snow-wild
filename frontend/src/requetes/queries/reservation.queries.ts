@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_RESERVATIONS_BY_USER_ID = gql`
-query ReservationsByUserId($reservationsByUserIdId: String!) {
+  query ReservationsByUserId($reservationsByUserIdId: String!) {
     reservationsByUserId(id: $reservationsByUserIdId) {
       id
       start_date
@@ -19,4 +19,11 @@ query ReservationsByUserId($reservationsByUserIdId: String!) {
         }
       }
     }
-  }`; 
+  }
+`;
+
+export const IS_DISPONIBLE_BETWEEN_TWO_DATES = gql`
+  query CheckAvailability($data: FindReservationMaterialsBetweenTwoDateInput!) {
+    reservationMaterialBetweenDates(data: $data)
+  }
+`;

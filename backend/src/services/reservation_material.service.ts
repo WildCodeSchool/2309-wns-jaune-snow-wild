@@ -49,7 +49,7 @@ export default class ReservationMaterialService {
           end_date: MoreThanOrEqual(from_date),
         },
       },
-      relations: ['reservation'],
+      relations: ['reservation', 'material'],
     })
 
     const reservedQuantitiesBySize: { [key: string]: number } = {}
@@ -68,7 +68,7 @@ export default class ReservationMaterialService {
       const { size, quantity: stockQuantity } = sizeInfo
       const reservedQuantity = reservedQuantitiesBySize[size] || 0
 
-      if (reservedQuantity > stockQuantity) {
+      if (reservedQuantity >= stockQuantity) {
         return false
       }
     }
