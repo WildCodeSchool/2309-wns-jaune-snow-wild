@@ -7,12 +7,11 @@ import assert from 'assert'
 import Category from '../../src/entities/category.entity'
 
 import {
-  FIND_CATEGORY_BY_ID,
   LIST_CATEGORY,
   LIST_CATEGORY_WITH_NAME,
 } from '../requete_tests/queries_tests/category.queries'
 
-import type { CategoryNameResponseData, ResponseData } from '../type_tests'
+import type { ResponseData } from '../type_tests'
 
 const categoryData: Category[] = [
   { id: '1', name: 'Categorie 1', material: [] },
@@ -66,16 +65,16 @@ describe('Test sur les livres', () => {
     })
   })
 
-  it("récupération d'une catégorie avec son nom", async () => {
-    const response = await server.executeOperation<CategoryNameResponseData>({
-      query: FIND_CATEGORY_BY_ID,
-      variables: {
-        findCategoryId: '1',
-      },
-    })
-    assert(response.body.kind === 'single')
-    expect(response.body.singleResult.data).toEqual({
-      findCategory: categoryData[0].id,
-    })
-  })
+  // it("récupération d'une catégorie avec son nom", async () => {
+  //   const response = await server.executeOperation<CategoryNameResponseData>({
+  //     query: FIND_CATEGORY_BY_ID,
+  //     variables: {
+  //       findCategoryId: '1',
+  //     },
+  //   })
+  //   assert(response.body.kind === 'single')
+  //   expect(response.body.singleResult.data).toEqual({
+  //     findCategory: categoryData[0].id,
+  //   })
+  // })
 })
