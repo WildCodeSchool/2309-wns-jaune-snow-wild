@@ -78,7 +78,10 @@ describe('Test sur les categories', () => {
     })
     assert(response.body.kind === 'single')
     expect(response.body.singleResult.data).toEqual({
-      findCategoryId: categoryData[0].id,
+      findCategory: {
+        id: categoryData[0].id,
+        name: categoryData[0].name,
+      },
     })
   })
 })
