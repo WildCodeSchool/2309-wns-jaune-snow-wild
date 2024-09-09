@@ -7,7 +7,7 @@ import ReservationResolver from './resolvers/reservation.resolver'
 import UserResolver from './resolvers/user.resolver'
 import Cookies from 'cookies'
 import UserService from './services/user.service'
-import PaymentResolver from "./resolvers/payment.resolver";
+import PaymentResolver from './resolvers/payment.resolver'
 
 import cors from 'cors'
 import express from 'express'
@@ -45,7 +45,7 @@ async function main() {
       UserResolver,
       ReservationResolver,
       ReservationMaterialResolver,
-      PaymentResolver
+      PaymentResolver,
     ],
     validate: false,
     authChecker: customAuthChecker,
@@ -60,10 +60,7 @@ async function main() {
   app.use(
     '/',
     cors<cors.CorsRequest>({
-      origin: [
-        'http://localhost:3000',
-        'http://localhost:8000',
-      ],
+      origin: ['http://localhost:3000', 'http://localhost:8000'],
       credentials: true,
     }),
     express.json(),

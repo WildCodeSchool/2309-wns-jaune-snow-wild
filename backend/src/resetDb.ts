@@ -49,7 +49,6 @@ async function main() {
     .insert()
     .into(Category)
     .values([
-
       { name: 'snowboard' },
       { name: 'ski' },
       { name: 'boots' },
@@ -58,12 +57,16 @@ async function main() {
     ])
     .execute()
 
-  const catSnowboard = await db .getRepository(Category).findOneBy({ name: 'snowboard' })
+  const catSnowboard = await db
+    .getRepository(Category)
+    .findOneBy({ name: 'snowboard' })
   const catSky = await db.getRepository(Category).findOneBy({ name: 'ski' })
   const catShoe = await db.getRepository(Category).findOneBy({ name: 'boots' })
-  const catAccessory = await db.getRepository(Category).findOneBy({ name: 'accessory' })
+  const catAccessory = await db
+    .getRepository(Category)
+    .findOneBy({ name: 'accessory' })
   const catStick = await db.getRepository(Category).findOneBy({ name: 'stick' })
-  
+
   await db
     .createQueryBuilder()
     .insert()
@@ -71,8 +74,7 @@ async function main() {
     .values([
       {
         name: 'Liberty',
-        picture:
-          '/uploads/liberty.jpg',
+        picture: '/uploads/liberty.jpg',
         price: 49,
         sizes: [
           { size: '110', quantity: 20 },
@@ -93,8 +95,7 @@ async function main() {
     .values([
       {
         name: 'REDSTER Q7.8 REVOSHOCK S',
-        picture:
-          '/uploads/redster.jpg',
+        picture: '/uploads/redster.jpg',
         price: 33,
         sizes: [
           { size: '150', quantity: 20 },
@@ -115,8 +116,7 @@ async function main() {
     .values([
       {
         name: 'Black Pearl 88 SP',
-        picture:
-          '/uploads/black-pearl.jpg',
+        picture: '/uploads/black-pearl.jpg',
         price: 33,
         sizes: [
           { size: '200', quantity: 20 },
@@ -137,8 +137,7 @@ async function main() {
     .values([
       {
         name: 'TRIXIE',
-        picture:
-          '/uploads/trixie.jpg',
+        picture: '/uploads/trixie.jpg',
         price: 20,
         sizes: [
           { size: '36', quantity: 20 },
@@ -159,8 +158,7 @@ async function main() {
     .values([
       {
         name: 'Bâtons de Ski Leki Bold Lite',
-        picture:
-          '/uploads/leki-bold-lite.jpg',
+        picture: '/uploads/leki-bold-lite.jpg',
         price: 10,
         sizes: [
           { size: '150', quantity: 20 },
@@ -181,8 +179,7 @@ async function main() {
     .values([
       {
         name: 'Allspeed Visor Impacts',
-        picture:
-          '/uploads/allspeed-visor.jpg',
+        picture: '/uploads/allspeed-visor.jpg',
         price: 15,
         sizes: [
           { size: 'S', quantity: 20 },

@@ -10,7 +10,9 @@ const ListMaterial: React.FC = () => {
   const { data: categoriesData, loading: categoriesLoading, error: categoriesError } = useQuery<CategoryQuery>(LIST_CATEGORIES);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
-  const { data: allMaterialsData, loading: allMaterialsLoading, error: allMaterialsError } = useQuery<MaterialQuery>(LIST_MATERIAL);
+  const { data: allMaterialsData, loading: allMaterialsLoading, error: allMaterialsError } = useQuery<MaterialQuery>(LIST_MATERIAL, {
+    fetchPolicy: "network-only"
+  });
   const [getMaterialsByCategory, { data: materialsData, loading: materialsLoading, error: materialsError }] = useLazyQuery<MaterialQuery>(LIST_MATERIAL_BY_CATEGORY_ID);
 
   const handleCategoryClick = (categoryId: string | null) => {

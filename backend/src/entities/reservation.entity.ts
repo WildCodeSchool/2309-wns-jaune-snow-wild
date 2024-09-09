@@ -12,9 +12,6 @@ import { ReservationMaterial } from './reservation_material.entity'
 import User from './user.entity'
 import { StatutReservation } from '../types'
 
-
-
-
 // =================================================================
 //                           OBJECT TYPE
 // =================================================================
