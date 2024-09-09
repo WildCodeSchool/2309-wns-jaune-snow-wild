@@ -63,7 +63,7 @@ const ListMaterial: React.FC = () => {
                     <div className="relative flex rounded-lg shadow-lg justify-center items-center h-52 overflow-hidden  rounded-t-lg">
                       <img
                         className="object-cover h-full "
-                        src={item.picture}
+                        src={process.env.NEXT_PUBLIC_IMAGE_URL + item.picture}
                         alt={item.name}
                       />
                       <div className="absolute   inset-0 bg-gradient-to-b from-transparent to-neutral-700  opacity-50"></div>
