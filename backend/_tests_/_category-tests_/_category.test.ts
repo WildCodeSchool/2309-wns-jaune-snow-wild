@@ -1,7 +1,6 @@
 import { ApolloServer } from '@apollo/server'
 import { buildSchemaSync } from 'type-graphql'
 import CategoryResolver from '../../src/resolvers/category.resolver'
-import { uuid } from 'uuidv4'
 
 import { addMocksToSchema } from '@graphql-tools/mock'
 import assert from 'assert'
@@ -35,7 +34,7 @@ beforeAll(async () => {
       categories() {
         return categoryData
       },
-      findCategory(_: any, args: { id: string }) {
+      findCategory(_: unknown, args: { id: string }) {
         return categoryData.find((b) => b.id == args.id)
       },
     },
