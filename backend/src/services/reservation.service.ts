@@ -4,7 +4,7 @@ import Reservation, {
   CreateReservationInput,
   UpdateReservationInput,
 } from '../entities/reservation.entity'
-import { StatutReservation } from '../types';
+import { StatutReservation } from '../types'
 export default class ReservationService {
   db: Repository<Reservation>
   constructor() {
@@ -16,9 +16,9 @@ export default class ReservationService {
       relations: {
         user: true,
         reservationMaterials: {
-          material: true
-        }
-      }
+          material: true,
+        },
+      },
     })
   }
 
@@ -33,7 +33,11 @@ export default class ReservationService {
   async findReservationsByUserId(id: string) {
     const reservationByUserId = await this.db.find({
       where: { user: { id } },
-      relations:['user', 'reservationMaterials', 'reservationMaterials.material'],
+      relations: [
+        'user',
+        'reservationMaterials',
+        'reservationMaterials.material',
+      ],
     })
 
     return reservationByUserId
