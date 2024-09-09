@@ -49,7 +49,7 @@ function MaterialDetail() {
         <div className="flex-auto w-64 flex items-center justify-center">
           <img
             className="max-w-28 object-contain"
-            src={material?.picture}
+            src={process.env.NEXT_PUBLIC_IMAGE_URL + material?.picture}
             alt={material?.name}
           />
         </div>
