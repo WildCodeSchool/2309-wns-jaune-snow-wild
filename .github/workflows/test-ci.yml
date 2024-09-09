@@ -21,7 +21,7 @@ jobs:
       - name: ESLint init and run fix
         run: cd backend && npm init && npm run fix .
       - name: Prettier
-        run: cd backend && npm run prettier --write .
+        run: cd backend && npx prettier --write .
   test-back:
     needs: ESLint
     runs-on: ubuntu-latest
