@@ -1,88 +1,164 @@
+import { Field, ID, InputType, ObjectType } from 'type-graphql'
 import {
   Column,
+  CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
-  ManyToMany,
   PrimaryGeneratedColumn,
-  JoinColumn,
-} from "typeorm";
-import { Field, ID, InputType, ObjectType } from "type-graphql";
-import User from "./user.entity";
-import Material from "./material.entity";
-import {
-  ReservationMaterial,
-  CreateReservationMaterialInput,
-} from "./reservation_material.entity";
+} from 'typeorm'
+import { ReservationMaterial } from './reservation_material.entity'
+import User from './user.entity'
+import { StatutReservation } from '../types'
 
-export enum StatutReservation {
-  AWAITING = "en_attente",
-  CONFIRMATION = "confirmée",
-  PAID = "payée",
-  CANCEL = "annulée",
-  FINISHED = "terminée",
-}
+// =================================================================
+//                           OBJECT TYPE
+// =================================================================
 
 @ObjectType()
 @Entity()
 export default class Reservation {
   @Field()
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
   @Field(() => User)
-  @ManyToOne(() => User, (user) => user.reservations)
-  userId: string;
+  @JoinColumn()
+  @ManyToOne(() => User, (u) => u.reservations, {
+    cascade: true,
+    onDelete: 'CASCADE',
+  })
+  user: User
 
   @Field()
   @Column()
-  start_date: Date;
+  start_date: Date
 
   @Field()
   @Column()
-  end_date: Date;
+  end_date: Date
 
   @Field()
-  @Column()
-  final_price: number;
+  @CreateDateColumn({
+    type: 'date',
+  })
+  createdAt: Date
 
   @Field()
   @Column({
-    type: "enum",
+    type: 'enum',
     enum: StatutReservation,
     default: StatutReservation.AWAITING,
   })
-  status: StatutReservation;
+  status: StatutReservation
 
   @Field(() => [ReservationMaterial])
   @JoinColumn()
-  @OneToMany(() => ReservationMaterial, (r) => r.id)
-  reservationMaterials: ReservationMaterial[];
+  @OneToMany(() => ReservationMaterial, (r) => r.reservation)
+  reservationMaterials: ReservationMaterial[]
 }
+
+// Quand on fait un ObjectType à supprimer, ne pas mettre d'id. Il sera supprimé, donc pas de retour.
+@ObjectType()
+export class ReservationDeleted {
+  @Field(() => User)
+  user: User
+
+  @Field(() => [ReservationMaterial])
+  reservationMaterials: ReservationMaterial[] // Liste des matériels réservés avec leur quantité
+
+  @Field()
+  status: StatutReservation.CANCEL
+}
+
+// =================================================================
+//                           INPUT TYPE
+// =================================================================
 
 @InputType()
 export class ReservationMaterialInput {
   @Field()
-  quantity: number;
+  quantity: number
 
   @Field()
-  materialId: string;
+  materialId: string
 
   @Field()
-  unit_price: number;
+  size: string
+}
+
+@InputType()
+export class PartialUserInput {
+  @Field(() => ID)
+  id: string
 }
 
 @InputType()
 export class CreateReservationInput {
   @Field()
-  userId: string; // Identifiant de l'utilisateur qui effectue la réservation
+  user: PartialUserInput // Identifiant de l'utilisateur qui effectue la réservation
 
   @Field(() => [ReservationMaterialInput])
-  materials: ReservationMaterialInput[]; // Liste des matériels réservés avec leur quantité
+  materials: ReservationMaterialInput[] // Liste des matériels réservés avec leur quantité
 
   @Field()
-  start_date: Date;
+  start_date: Date
 
   @Field()
-  end_date: Date;
+  end_date: Date
+}
+
+@InputType()
+export class UpdateReservationInput {
+  @Field(() => ID)
+  id: string
+
+  @Field({ nullable: true })
+  start_date?: Date
+
+  @Field({ nullable: true })
+  end_date?: Date
+}
+
+@ObjectType()
+export class AdminDeletedReservation {
+  @Field(() => User)
+  user: User
+
+  @Field(() => [ReservationMaterial])
+  reservationMaterials: ReservationMaterial[] // Liste des matériels réservés avec leur quantité
+
+  @Field()
+  status: StatutReservation.CANCEL
+
+  @Field()
+  start_date: Date
+
+  @Field()
+  end_date: Date
+
+  @Field()
+  createdAt: Date
+}
+
+@ObjectType()
+export class AdminGetReservations {
+  @Field(() => User)
+  user: User
+
+  @Field(() => [ReservationMaterial])
+  reservationMaterials: ReservationMaterial[] // Liste des matériels réservés avec leur quantité
+
+  @Field()
+  status: StatutReservation.CANCEL
+
+  @Field()
+  start_date: Date
+
+  @Field()
+  end_date: Date
+
+  @Field()
+  createdAt: Date
 }
