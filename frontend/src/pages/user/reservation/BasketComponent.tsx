@@ -84,7 +84,7 @@ function BasketComponent({ dateFormInfo }: { dateFormInfo: DateFormInfos }) {
                 <div className="relative h-48">
                   <img
                     className="m-5 max-w-28 object-contain"
-                    src={item.picture}
+                    src={process.env.NEXT_PUBLIC_IMAGE_URL + item.picture}
                     alt={item.name}
                   />
                 </div>
