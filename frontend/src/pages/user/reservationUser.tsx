@@ -37,7 +37,7 @@ const UserReservations = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {reservation.reservationMaterials.map((material) => (
               <div key={material.id} className="border rounded-lg p-4 shadow-sm">
-                <img src={material.material.picture} alt={material.material.name} className="w-96 h-32 object-cover rounded mb-4" />
+                <img src={process.env.NEXT_PUBLIC_IMAGE_URL + material.material.picture} alt={material.material.name} className="w-96 h-32 object-cover rounded mb-4" />
                 <p className="font-semibold">{material.material.name}</p>
                 <p>Price: ${material.price}</p>
                 <p>Quantity: {material.quantity}</p>
