@@ -126,25 +126,6 @@ function Reservations() {
       cell: ({ row }) => <div className="lowercase">{row.getValue("status")}</div>
     },
     {
-      accessorKey: "role",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => {
-                console.log(column.getIsSorted() === "desc")
-                column.toggleSorting(column.getIsSorted() === "asc")
-              }
-            }
-          >
-            Role
-            <CaretSortIcon className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("role")}</div>
-    },
-    {
       header: "Action",
       cell: ({ row }) => {
         // console.log('row: ', row)
