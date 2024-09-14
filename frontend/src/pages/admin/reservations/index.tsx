@@ -15,9 +15,10 @@ import { DELETE_RESERVATION_BY_ADMIN } from "@/admin/requetes/mutations/reservat
 function Reservations() {
   const router = useRouter();
   let { data, error, loading } = useQuery(GET_RESERVATIONS, {
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: "no-cache",
   });
-
+  console.log(data)
+  console.log(error)
   const [deleteReservation] = useMutation(DELETE_RESERVATION_BY_ADMIN, {
     fetchPolicy: "network-only",
     // refetchQueries: [{ query: GET_RESERVATIONS }]
@@ -84,7 +85,7 @@ function Reservations() {
           </Button>
         )
       },
-      cell: ({ row }) => <div className="lowercase">{row.getValue("stat_date")}</div>
+      cell: ({ row }) => <div className="lowercase">{row.getValue("start_date")}</div>
     },
     {
       accessorKey: "end_date",

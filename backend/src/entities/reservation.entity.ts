@@ -154,11 +154,11 @@ export class AdminGetReservations {
   status: StatutReservation.CANCEL
 
   @Field()
-  start_date: Date
+  start_date?: Date
 
   @Field()
-  end_date: Date
+  end_date?: Date
 
   @Field()
-  createdAt: Date
+  createdAt?: Date
 }

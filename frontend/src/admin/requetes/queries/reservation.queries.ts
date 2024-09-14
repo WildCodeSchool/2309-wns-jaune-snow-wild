@@ -3,7 +3,6 @@ import { gql } from "@apollo/client";
 export const GET_RESERVATIONS = gql`
   query AdminGetReservations {
     adminGetReservations {
-      createdAt
       end_date
       id
       start_date

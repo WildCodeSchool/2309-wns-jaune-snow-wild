@@ -30,7 +30,6 @@ export default class UserResolver {
 
     const isPasswordValid = await argon2.verify(user.password, infos.password)
     if (isPasswordValid) {
-      console.log('JWT_SECRET_KEY', process.env.JWT_SECRET_KEY)
       const token = await new SignJWT({
         email: user.email,
         role: user.role,
