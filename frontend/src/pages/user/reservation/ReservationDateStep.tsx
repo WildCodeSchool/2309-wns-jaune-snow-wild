@@ -34,7 +34,7 @@ export interface DateFormInfos {
 }
 function ReservationDateStep() {
   const { nextStep } = useStepper();
-  const actualDate = new Date(Date.now());
+  const actualDate = new Date(new Date().getFullYear(),new Date().getMonth(), new Date().getDate());
   const [formInfos, setFormInfos] = useState<DateFormInfos>({
     start_date: actualDate,
     end_date: new Date(
