@@ -12,6 +12,7 @@ import ControlledInput from '@/admin/components/ControlledInput';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { toast } from '@/components/ui/use-toast';
 import {
   Form,
   FormControl,
@@ -89,6 +90,10 @@ const FormHook = () => {
         }).then((res) => {
           console.log('res: =======>',res)
           if(res.data) {
+            toast({
+              title: "Success",
+              description: "New material successfully created!"
+            })
             router.push("/admin/products")
           };
         }).catch((err) => {

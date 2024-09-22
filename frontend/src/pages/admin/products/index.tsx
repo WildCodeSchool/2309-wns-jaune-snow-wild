@@ -29,6 +29,7 @@ const ProductsAdminPage = () => {
   const {data, loading, error } = useQuery(LIST_MATERIAL, {
     fetchPolicy: "no-cache"
   });
+  console.log('data matrial', data)
   const [getCategories] = useLazyQuery(LIST_CATEGORIES);
   const router = useRouter();
   const [categories, setCategories] = useState<CategoryType[]>([])
@@ -37,13 +38,14 @@ const ProductsAdminPage = () => {
       variables: {
         deleteMaterialId: idProduct
       },
-      onCompleted:((data) => {
-        console.log("successfully delete")
+      onCompleted:((res) => {
+        console.log("successfully delete", res)
         toast({
           title: "Delete",
           description: "Successfully deleted"
         })
-        router.reload();
+        data.listMaterials = data.listMaterials.filter((m: Material, index: number) => res.deleteMaterial.id !== m.id )
+        router.push("/admin/products");
       }),
       onError:((error) => {
         console.log("fail error")
